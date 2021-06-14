@@ -28,13 +28,12 @@ class Processer:
     def __init__(self):
         self.outbuf = []
 
-        self.subp = subprocess.Popen("BaiduPCS-Go.exe", shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        #command = bytes("help\r\n", encoding="utf-8")
-        self.processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,))
-        self.processthread.start()
+        #self.subp = subprocess.Popen("BaiduPCS-Go.exe", shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        #self.processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,))
+        #self.processthread.start()
     def __del__(self):
         print("__del__")
-        stop_thread(self.processthread)
+        #stop_thread(self.processthread)
         
     def getAllFiles(self):
         #type name
@@ -42,19 +41,20 @@ class Processer:
                  {'d', 'testd2'},
                  {'f', 'test1.png'},
                  {'f', 'test2.png'}]
-        return self.subprocess_execute("help")
+        return self.subprocess_execute("./BaiduPCS-Go ls")
     def downloadFiles(self, filename):
         pass
     def deleteFiles(self,filename):
         pass
     def subprocess_execute(self, cmd):
-        command = bytes(cmd+"\r\n", encoding="utf-8")
-        self.subp.stdin.write(command)
-        self.subp.stdin.flush()
-        time.sleep(1)
-        result_text = []
-        while len(self.outbuf) > 0:
-            result_text.append(self.outbuf.pop(0))
+        #command = bytes(cmd+"\r\n", encoding="utf-8")
+        #self.subp.stdin.write(command)
+        #self.subp.stdin.flush()
+        #time.sleep(1)
+        
+        result_text = os.popen(cmd).read()
+
+
         return result_text
     def subprocess_inout(self):
         while True:

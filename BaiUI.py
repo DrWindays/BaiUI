@@ -58,7 +58,13 @@ class BaiTabBar(QTabBar):
             painter.translate(-c)
             painter.drawControl(QStyle.CE_TabBarTabLabel,opt)
             painter.restore()
-            
+class FileItem(QWidget):
+    def __init__(self,id,name):
+        self.mainwidget = QWidget()
+        self.hbox = QHBoxLayout()
+        self.setLayout(self.hbox)
+        self.checkbox = 
+
 class BaiUI(QWidget):
 
     now_down_l = 0
@@ -119,7 +125,4 @@ if __name__ == "__main__":
     
     xer = backend.Processer()
     result = xer.getAllFiles()
-    for line in result:
-        print(line)
-    del xer
     sys.exit(BaiAPP.exec_())

@@ -41,7 +41,16 @@ class Processer:
                  {'d', 'testd2'},
                  {'f', 'test1.png'},
                  {'f', 'test2.png'}]
-        return self.subprocess_execute("./BaiduPCS-Go ls")
+        lists = self.subprocess_execute("./BaiduPCS-Go ls")
+        result = []
+        for l in lists[ 4 : len(lists)-2 ]:
+            l = ' '.join(l.split()) #多个空格合并成一个空格
+            l = l.split(' ')
+            result.append([l[0], l[1] ,l[2],l[3],l[4]])
+
+
+        return result
+
     def downloadFiles(self, filename):
         pass
     def deleteFiles(self,filename):
@@ -51,9 +60,10 @@ class Processer:
         #self.subp.stdin.write(command)
         #self.subp.stdin.flush()
         #time.sleep(1)
-        
-        result_text = os.popen(cmd).read()
-
+        result_text = []
+        subp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in subp.stdout.readlines():
+            result_text.append(str(line, encoding = "utf-8"))
 
         return result_text
     def subprocess_inout(self):

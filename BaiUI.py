@@ -58,12 +58,26 @@ class BaiTabBar(QTabBar):
             painter.translate(-c)
             painter.drawControl(QStyle.CE_TabBarTabLabel,opt)
             painter.restore()
+
 class FileItem(QWidget):
-    def __init__(self,id,name):
+    def __init__(self, id, name, size, date, time):
+        super().__init__()
+
         self.mainwidget = QWidget()
         self.hbox = QHBoxLayout()
         self.setLayout(self.hbox)
-        self.checkbox = 
+
+        self.checkbox = QCheckBox()
+        self.idlbl = QLabel(id)
+        self.namelbl = QLabel(name)
+        self.sizelbl = QLabel(size)
+        self.timelbl = QLabel(date+' '+time)
+
+        self.hbox.addWidget(self.checkbox)
+        self.hbox.addWidget(self.idlbl)
+        self.hbox.addWidget(self.namelbl)
+        self.hbox.addWidget(self.sizelbl)
+        self.hbox.addWidget(self.timelbl)
 
 class BaiUI(QWidget):
 
@@ -80,6 +94,13 @@ class BaiUI(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+
+
+        self.xer = backend.Processer()
+        files = self.xer.getAllFiles()
+
+        print(files)
+        self. addAllFiles(files)
     def initUI(self):
         vbox_main = QVBoxLayout()
         hbox_top = QHBoxLayout()
@@ -103,6 +124,10 @@ class BaiUI(QWidget):
         self.tabWidget.addTab(self.now_down_tab, '正在下载')
         self.tabWidget.addTab(self.comp_down_tab, '传输完成')
         
+
+        self.mypan_vbox = QVBoxLayout()
+        self.mypan_tab.setLayout(self.mypan_vbox)
+
         vbox_main.addLayout(hbox_top)
         vbox_main.addLayout(vbox_bottom)
         
@@ -115,14 +140,22 @@ class BaiUI(QWidget):
         vbox_bottom.addWidget(self.tabWidget)
 
         self.setGeometry(300, 300, 300, 220)
-        self.setFixedSize(1200,600)
+        self.setFixedSize(800,600)
 
         self.show()
+
+    def addAllFiles(self, filelst):
+        for file in filelst:
+            id, size, date,time , name= file
+            self.mypan_vbox.addWidget(FileItem(id, name, size, date, time))
 
 if __name__ == "__main__":
     BaiAPP = QtWidgets.QApplication(sys.argv)
     BaiUI = BaiUI()
     
-    xer = backend.Processer()
-    result = xer.getAllFiles()
+
+
+
+
+
     sys.exit(BaiAPP.exec_())

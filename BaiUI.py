@@ -15,7 +15,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QCheckBox,QTabBar
 from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget
 from PyQt5.QtGui import QTextCursor, QIcon,QPainter
-from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
+from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab,
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
 from PyQt5.QtCore import QRect,QPoint
 import sys,os,subprocess
 import backend
@@ -78,6 +79,23 @@ class FileItem(QWidget):
         self.hbox.addWidget(self.namelbl)
         self.hbox.addWidget(self.sizelbl)
         self.hbox.addWidget(self.timelbl)
+
+class FileList(QTableWidget):
+    def __init__(self, filelst,parent=None):
+        super().__init__(len(filelst), 4, parent)
+        i = 0
+        for file in filelst:
+            id, size, date,time , name= file
+            item0 = QTableWidgetItem(id)
+            item1 = QTableWidgetItem(size)
+            item2 = QTableWidgetItem(date+' '+time)
+            item3 = QTableWidgetItem(name)
+            self.setItem(i, 0, item0)
+            self.setItem(i, 1, item1)
+            self.setItem(i, 2, item2)
+            self.setItem(i, 3, item3)
+            i+=1
+
 
 class BaiUI(QWidget):
 
@@ -145,9 +163,11 @@ class BaiUI(QWidget):
         self.show()
 
     def addAllFiles(self, filelst):
-        for file in filelst:
-            id, size, date,time , name= file
-            self.mypan_vbox.addWidget(FileItem(id, name, size, date, time))
+
+        #for file in filelst:
+        #    id, size, date,time , name= file
+        #    self.mypan_vbox.addWidget(FileItem(id, name, size, date, time))
+        self.mypan_vbox.addWidget(FileList(filelst))
 
 if __name__ == "__main__":
     BaiAPP = QtWidgets.QApplication(sys.argv)

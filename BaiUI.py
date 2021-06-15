@@ -15,8 +15,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QCheckBox,QTabBar
 from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget
 from PyQt5.QtGui import QTextCursor, QIcon,QPainter
-from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab,
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
+from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView
 from PyQt5.QtCore import QRect,QPoint
 import sys,os,subprocess
 import backend
@@ -82,20 +82,46 @@ class FileItem(QWidget):
 
 class FileList(QTableWidget):
     def __init__(self, filelst,parent=None):
-        super().__init__(len(filelst), 4, parent)
+        super().__init__(len(filelst), 5, parent)
+        self.filelst = filelst
+        self.checkbox = []
         i = 0
         for file in filelst:
             id, size, date,time , name= file
-            item0 = QTableWidgetItem(id)
+            item0 = QTableWidgetItem(str(int(id)+1))
             item1 = QTableWidgetItem(size)
             item2 = QTableWidgetItem(date+' '+time)
             item3 = QTableWidgetItem(name)
-            self.setItem(i, 0, item0)
-            self.setItem(i, 1, item1)
-            self.setItem(i, 2, item2)
-            self.setItem(i, 3, item3)
-            i+=1
 
+            checkbox = QCheckBox()
+
+            self.checkbox.append(checkbox)
+            self.setCellWidget(i, 0, checkbox)
+            self.setItem(i, 1, item0)
+            self.setItem(i, 2, item1)
+            self.setItem(i, 3, item2)
+            self.setItem(i, 4, item3)
+            i+=1
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.horizontalHeader().setVisible(False)
+        self.verticalHeader().setVisible(False)
+        self.resizeRowsToContents()
+        self.resizeColumnsToContents()
+        self.setShowGrid(False);
+        self.setStyleSheet(
+        "QTableWidget::Item{border:0px solid rgb(0,0,0);"
+        "border-bottom:1px solid rgb(0,0,0);}")
+
+    def getCheckedFiles(self):
+        result = []
+        i = 0
+        for c in self.checkbox:
+            if c.isChecked() == True:
+                id, size, date, time, name = self.filelst[i]
+                result.append(name)
+            i+=1
+        return result
 
 class BaiUI(QWidget):
 
@@ -119,6 +145,7 @@ class BaiUI(QWidget):
 
         print(files)
         self. addAllFiles(files)
+
     def initUI(self):
         vbox_main = QVBoxLayout()
         hbox_top = QHBoxLayout()
@@ -147,6 +174,12 @@ class BaiUI(QWidget):
         self.mypan_tab.setLayout(self.mypan_vbox)
 
         vbox_main.addLayout(hbox_top)
+        
+        DownloadBtn = QPushButton("下载")
+        DownloadBtn.clicked.connect(self.DownloadClicked)
+
+        hbox_top.addWidget(DownloadBtn)
+
         vbox_main.addLayout(vbox_bottom)
         
         #vbox_bottom.addLayout(vbox_left)
@@ -167,7 +200,11 @@ class BaiUI(QWidget):
         #for file in filelst:
         #    id, size, date,time , name= file
         #    self.mypan_vbox.addWidget(FileItem(id, name, size, date, time))
-        self.mypan_vbox.addWidget(FileList(filelst))
+        self.filelist = FileList(filelst)
+        self.mypan_vbox.addWidget(self.filelist)
+
+    def DownloadClicked(self):
+        print(self.filelist.getCheckedFiles())
 
 if __name__ == "__main__":
     BaiAPP = QtWidgets.QApplication(sys.argv)

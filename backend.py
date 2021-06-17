@@ -37,19 +37,17 @@ class Processer:
         
     def getAllFiles(self):
         #type name
-        lists = [{'d', 'testd1'},
-                 {'d', 'testd2'},
-                 {'f', 'test1.png'},
-                 {'f', 'test2.png'}]
         lists = self.subprocess_execute("./BaiduPCS-Go ls")
         result = []
         for l in lists[ 4 : len(lists)-2 ]:
             l = ' '.join(l.split()) #多个空格合并成一个空格
             l = l.split(' ')
             result.append([l[0], l[1] ,l[2],l[3],l[4]])
-
-
         return result
+
+    def getCurrentDir(self):
+        result = self.subprocess_execute("./BaiduPCS-Go pwd")
+        return result[0][:-1]
 
     def downloadFiles(self, filename):
         pass

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 '''
@@ -80,7 +80,10 @@ class FileItem(QWidget):
         self.hbox.addWidget(self.sizelbl)
         self.hbox.addWidget(self.timelbl)
 
+        self.currentDir = ""
+
 class FileList(QTableWidget):
+    fileListDoubleClicked = QtCore.pyqtSignal(list)
     def __init__(self, filelst,parent=None):
         super().__init__(len(filelst), 5, parent)
         self.filelst = filelst
@@ -97,21 +100,26 @@ class FileList(QTableWidget):
 
             self.checkbox.append(checkbox)
             self.setCellWidget(i, 0, checkbox)
-            self.setItem(i, 1, item0)
+            #self.setItem(i, 1, item0)
             self.setItem(i, 2, item1)
             self.setItem(i, 3, item2)
-            self.setItem(i, 4, item3)
+            self.setItem(i, 1, item3)
+            self.setRowHeight(i,40)
             i+=1
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setVisible(False)
         self.verticalHeader().setVisible(False)
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
         self.setShowGrid(False);
         self.setStyleSheet(
+        "QTableWidget{border:0px solid rgb(0,0,0);}"
         "QTableWidget::Item{border:0px solid rgb(0,0,0);"
         "border-bottom:1px solid rgb(0,0,0);}")
+
+        #connect slot event
+        self.cellDoubleClicked.connect(self.FileListDoubleClicked)
 
     def getCheckedFiles(self):
         result = []
@@ -123,96 +131,101 @@ class FileList(QTableWidget):
             i+=1
         return result
 
+    def selectAllFiles(self,check):
+        for c in self.checkbox:
+            c.setChecked(check)
+
+    #SLOT EVENT#
+    def FileListDoubleClicked(self, row, column):
+        self.fileListDoubleClicked.emit(self.filelst[row])
+
 class BaiUI(QWidget):
-
-    now_down_l = 0
-    comp_down_l = 0
-    
-    file_tree_l = 0
-    
-    tabWidget = 0
-    now_down_tab = 0
-    comp_down_tab = 0
-    mypan_tab = 0
-
     def __init__(self):
         super().__init__()
-        self.initUI()
 
-
-        self.xer = backend.Processer()
-        files = self.xer.getAllFiles()
-
-        print(files)
-        self. addAllFiles(files)
-
-    def initUI(self):
-        vbox_main = QVBoxLayout()
-        hbox_top = QHBoxLayout()
-        vbox_bottom = QVBoxLayout()
-        
+        #initialize all things
+        self.mypan_vbox = QVBoxLayout()
+        self.currentDirLbl = QLabel()
         self.now_down_l = QLabel("正在下载")
         self.comp_down_l = QLabel("完成下载")
         self.file_tree_l = QLabel("当前文件")
-        blank_l = QLabel("    ")
-        
-        self.setLayout(vbox_main)
-        
         self.tabWidget = BaiTabWidget()
         self.now_down_tab = QWidget()
         self.comp_down_tab = QWidget()
         self.mypan_tab = QWidget()
+        self.downloadBtn = QPushButton("下载")
+        self.selectAllBtn = QPushButton("全选")
+
+        self.selectFlag = False
+        #get backend handler: xer
+        self.xer = backend.Processer()
+        self.filelist = FileList(self.xer.getAllFiles())
+        self.currentDirLbl.setText("当前目录： " + self.xer.getCurrentDir())
+
+        #connect all slot
+        self.downloadBtn.clicked.connect(self.DownloadClicked)
+        self.selectAllBtn.clicked.connect(self.SelectAllClicked)
+        self.filelist.fileListDoubleClicked.connect(self.FileListDoubleClicked)
+
+        self.initUI()
+
+    def initUI(self):
+        god_vbox_main = QVBoxLayout()
+        top_hbox_nav = QHBoxLayout()
+        center_vbox_container = QVBoxLayout()
+        blank_l = QLabel("    ")
+
+        self.setLayout(god_vbox_main)
 
         #self.tabWidget.setTabPosition(BaiTabWidget.West)
         #self.tabWidget.addTab(self.tabWidget, '正在下载')
         self.tabWidget.addTab(self.mypan_tab, '全部文件')
         self.tabWidget.addTab(self.now_down_tab, '正在下载')
         self.tabWidget.addTab(self.comp_down_tab, '传输完成')
-        
 
-        self.mypan_vbox = QVBoxLayout()
         self.mypan_tab.setLayout(self.mypan_vbox)
 
-        vbox_main.addLayout(hbox_top)
+        god_vbox_main.addLayout(top_hbox_nav)
         
-        DownloadBtn = QPushButton("下载")
-        DownloadBtn.clicked.connect(self.DownloadClicked)
+        #create the navigation button at the most top of the app.
+        top_hbox_nav.addWidget(self.downloadBtn)
+        top_hbox_nav.addWidget(self.selectAllBtn)
+        #top_hbox_nav.addWidget(self.currentDirLbl)
 
-        hbox_top.addWidget(DownloadBtn)
-
-        vbox_main.addLayout(vbox_bottom)
-        
-        #vbox_bottom.addLayout(vbox_left)
-        #vbox_bottom.addLayout(vbox_right)
-        
-        hbox_top.addWidget(blank_l)
-        #hbox_top.addWidget(self.file_tree_l)
-        
-        vbox_bottom.addWidget(self.tabWidget)
+        god_vbox_main.addLayout(center_vbox_container)
+        center_vbox_container.addWidget(self.tabWidget)
 
         self.setGeometry(300, 300, 300, 220)
         self.setFixedSize(800,600)
 
-        self.show()
-
-    def addAllFiles(self, filelst):
-
-        #for file in filelst:
-        #    id, size, date,time , name= file
-        #    self.mypan_vbox.addWidget(FileItem(id, name, size, date, time))
-        self.filelist = FileList(filelst)
+        self.currentDirLbl.setStyleSheet(
+            "QLabel{border:0px solid rgb(0,0,0);"
+            "font:bold;"
+            "color:purple}")
+        self.currentDirLbl.setContentsMargins(0,3,0,0)
+        self.mypan_vbox.addWidget(self.currentDirLbl)
         self.mypan_vbox.addWidget(self.filelist)
 
+        self.show()
+
+    #SLOT EVENT#
     def DownloadClicked(self):
         print(self.filelist.getCheckedFiles())
+    def SelectAllClicked(self):
+        if self.selectFlag == True:
+            self.selectAllBtn.setText("全选")
+            self.selectFlag = False
+        else :
+            self.selectAllBtn.setText("全不选")
+            self.selectFlag = True
+        self.filelist.selectAllFiles(self.selectFlag)
+
+    def FileListDoubleClicked(self, line):
+        print(line)
+
 
 if __name__ == "__main__":
     BaiAPP = QtWidgets.QApplication(sys.argv)
     BaiUI = BaiUI()
-    
-
-
-
-
 
     sys.exit(BaiAPP.exec_())

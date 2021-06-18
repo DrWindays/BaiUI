@@ -49,15 +49,14 @@ class Processer:
         result = self.subprocess_execute("./BaiduPCS-Go pwd")
         return result[0][:-1]
 
+    def changeDir(self,dir):
+        result = self.subprocess_execute("./BaiduPCS-Go cd " + dir)
+
     def downloadFiles(self, filename):
         pass
     def deleteFiles(self,filename):
         pass
     def subprocess_execute(self, cmd):
-        #command = bytes(cmd+"\r\n", encoding="utf-8")
-        #self.subp.stdin.write(command)
-        #self.subp.stdin.flush()
-        #time.sleep(1)
         result_text = []
         subp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         for line in subp.stdout.readlines():

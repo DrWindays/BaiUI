@@ -20,6 +20,7 @@ from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView
 from PyQt5.QtCore import QRect,QPoint
 import sys,os,subprocess
 import backend
+from LogRecord import *
 
 class BaiTabWidget(QTabWidget):
     def __init__(self):
@@ -86,9 +87,21 @@ class FileList(QTableWidget):
     fileListDoubleClicked = QtCore.pyqtSignal(list)
     def __init__(self, filelst,parent=None):
         super().__init__(len(filelst), 5, parent)
+
+        #connect slot event
+        self.cellDoubleClicked.connect(self.FileListDoubleClicked)
+
+        self.updateFileList(filelst)
+
+    def updateFileList(self,filelst):
+        self.clear()
         self.filelst = filelst
         self.checkbox = []
-        i = 0
+
+        item_rtnback = QTableWidgetItem("../")
+        self.setItem(0, 0, item_rtnback)
+
+        i = 1
         for file in filelst:
             id, size, date,time , name= file
             item0 = QTableWidgetItem(str(int(id)+1))
@@ -106,6 +119,7 @@ class FileList(QTableWidget):
             self.setItem(i, 1, item3)
             self.setRowHeight(i,40)
             i+=1
+
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setVisible(False)
@@ -117,10 +131,6 @@ class FileList(QTableWidget):
         "QTableWidget{border:0px solid rgb(0,0,0);}"
         "QTableWidget::Item{border:0px solid rgb(0,0,0);"
         "border-bottom:1px solid rgb(0,0,0);}")
-
-        #connect slot event
-        self.cellDoubleClicked.connect(self.FileListDoubleClicked)
-
     def getCheckedFiles(self):
         result = []
         i = 0
@@ -160,7 +170,8 @@ class BaiUI(QWidget):
         #get backend handler: xer
         self.xer = backend.Processer()
         self.filelist = FileList(self.xer.getAllFiles())
-        self.currentDirLbl.setText("当前目录： " + self.xer.getCurrentDir())
+
+        self.updateFileList()
 
         #connect all slot
         self.downloadBtn.clicked.connect(self.DownloadClicked)
@@ -208,9 +219,13 @@ class BaiUI(QWidget):
 
         self.show()
 
+    def updateFileList(self):
+        self.filelist.updateFileList(self.xer.getAllFiles())
+        self.currentDirLbl.setText("当前目录： " + self.xer.getCurrentDir())
+
     #SLOT EVENT#
     def DownloadClicked(self):
-        print(self.filelist.getCheckedFiles())
+        log.debug(self.filelist.getCheckedFiles())
     def SelectAllClicked(self):
         if self.selectFlag == True:
             self.selectAllBtn.setText("全选")
@@ -221,10 +236,22 @@ class BaiUI(QWidget):
         self.filelist.selectAllFiles(self.selectFlag)
 
     def FileListDoubleClicked(self, line):
-        print(line)
+        log.debug(line)
+        dir = ""
+        if "../" in line[4]:
+            log.debug("return back to up path "+line[4])
+            dir = self.currentDirLbl.text()
+            dir = dir[ : dir.rfind("/") - 1]
+        elif "/" in line[4]:
+            log.debug("current dir: "+line[4])
+            dir = line[4]
 
+        log.debug(dir)
+        self.xer.changeDir(dir)
+        self.updateFileList()
 
 if __name__ == "__main__":
+    log.debug("Program Start")
     BaiAPP = QtWidgets.QApplication(sys.argv)
     BaiUI = BaiUI()
 

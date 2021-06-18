@@ -9,6 +9,9 @@ Changes:
 #2021-05-25
 draft version.
 
+#2021-06-18
+#sudo mount -t vfat -o uid=1000,iocharset=utf8 /dev/sda /mnt/usb
+
 ----------------------------------------------------
 '''
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -94,13 +97,16 @@ class FileList(QTableWidget):
         self.updateFileList(filelst)
 
     def updateFileList(self,filelst):
-        self.clear()
-        self.filelst = filelst
+        self.filelst = [["0","0","0","0","../"]] + filelst
         self.checkbox = []
+        log.debug(filelst)
+
+        self.clear()
+        self.setRowCount(len(self.filelst))
 
         item_rtnback = QTableWidgetItem("../")
         self.setItem(0, 0, item_rtnback)
-
+        self.setRowHeight(0, 40)
         i = 1
         for file in filelst:
             id, size, date,time , name= file
@@ -131,6 +137,7 @@ class FileList(QTableWidget):
         "QTableWidget{border:0px solid rgb(0,0,0);}"
         "QTableWidget::Item{border:0px solid rgb(0,0,0);"
         "border-bottom:1px solid rgb(0,0,0);}")
+
     def getCheckedFiles(self):
         result = []
         i = 0
@@ -155,6 +162,8 @@ class BaiUI(QWidget):
 
         #initialize all things
         self.mypan_vbox = QVBoxLayout()
+        self.now_down_vbox = QVBoxLayout()
+        self.comp_down_vbox = QVBoxLayout()
         self.currentDirLbl = QLabel()
         self.now_down_l = QLabel("正在下载")
         self.comp_down_l = QLabel("完成下载")
@@ -165,6 +174,8 @@ class BaiUI(QWidget):
         self.mypan_tab = QWidget()
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
+        self.now_down_progress_lbl = QLabel()
+
 
         self.selectFlag = False
         #get backend handler: xer
@@ -195,6 +206,7 @@ class BaiUI(QWidget):
         self.tabWidget.addTab(self.comp_down_tab, '传输完成')
 
         self.mypan_tab.setLayout(self.mypan_vbox)
+        self.now_down_tab.setLayout(self.now_down_vbox)
 
         god_vbox_main.addLayout(top_hbox_nav)
         
@@ -214,8 +226,13 @@ class BaiUI(QWidget):
             "font:bold;"
             "color:purple}")
         self.currentDirLbl.setContentsMargins(0,3,0,0)
+
+        #create the mypan tab 
         self.mypan_vbox.addWidget(self.currentDirLbl)
         self.mypan_vbox.addWidget(self.filelist)
+
+        #create now download tab
+        self.now_down_vbox.addWidget(self.now_down_progress_lbl)
 
         self.show()
 
@@ -226,6 +243,8 @@ class BaiUI(QWidget):
     #SLOT EVENT#
     def DownloadClicked(self):
         log.debug(self.filelist.getCheckedFiles())
+        self.xer.downloadFiles(self.filelist.getCheckedFiles())
+
     def SelectAllClicked(self):
         if self.selectFlag == True:
             self.selectAllBtn.setText("全选")
@@ -241,14 +260,18 @@ class BaiUI(QWidget):
         if "../" in line[4]:
             log.debug("return back to up path "+line[4])
             dir = self.currentDirLbl.text()
-            dir = dir[ : dir.rfind("/") - 1]
+            dir = dir[ dir.find("： ") + 2 : dir.rfind("/") + 1]
         elif "/" in line[4]:
             log.debug("current dir: "+line[4])
             dir = line[4]
 
         log.debug(dir)
-        self.xer.changeDir(dir)
-        self.updateFileList()
+        if dir != "":
+            self.xer.changeDir(dir)
+            self.updateFileList()
+        else :
+            log.debug("start download " + line[4])
+            self.xer.downloadFiles(line[4])
 
 if __name__ == "__main__":
     log.debug("Program Start")

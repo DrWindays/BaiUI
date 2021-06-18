@@ -4,7 +4,7 @@ import sys,os,subprocess
 import threading
 import ctypes
 import time
-
+from LogRecord import *
 def _async_raise(tid, exctype):
     """raises the exception, performs cleanup if needed"""
     tid = ctypes.c_long(tid)
@@ -53,7 +53,9 @@ class Processer:
         result = self.subprocess_execute("./BaiduPCS-Go cd " + dir)
 
     def downloadFiles(self, filename):
-        pass
+        result = self.subprocess_execute("./BaiduPCS-Go d " + filename)
+        log.debug(result)
+
     def deleteFiles(self,filename):
         pass
     def subprocess_execute(self, cmd):

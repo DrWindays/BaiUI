@@ -1,5 +1,0 @@
-2021-06-18 15:34:01,864 - LogRecord.py[line:35] - DEBUG: Program Start
-2021-06-18 15:34:10,774 - LogRecord.py[line:35] - DEBUG: ['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3']
-2021-06-18 15:34:10,776 - LogRecord.py[line:35] - DEBUG: 
-2021-06-18 15:34:27,479 - LogRecord.py[line:35] - DEBUG: ['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3']
-2021-06-18 15:34:27,481 - LogRecord.py[line:35] - DEBUG: 

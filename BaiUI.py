@@ -88,12 +88,11 @@ class FileItem(QWidget):
 
 class FileList(QTableWidget):
     fileListDoubleClicked = QtCore.pyqtSignal(list)
-    def __init__(self, filelst,parent=None):
+    def __init__(self, filelst=[] ,parent=None):
         super().__init__(len(filelst), 5, parent)
 
         #connect slot event
         self.cellDoubleClicked.connect(self.FileListDoubleClicked)
-
         self.updateFileList(filelst)
 
     def updateFileList(self,filelst):
@@ -157,6 +156,11 @@ class FileList(QTableWidget):
         self.fileListDoubleClicked.emit(self.filelst[row])
 
 class BaiUI(QWidget):
+    updateFileListSignal = QtCore.pyqtSignal(list)
+    updateDirSignal = QtCore.pyqtSignal(str)
+    changeDirSingal = QtCore.pyqtSignal()
+    downloadFilesSignal = QtCore.pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
 
@@ -174,22 +178,34 @@ class BaiUI(QWidget):
         self.mypan_tab = QWidget()
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
+        self.now_down_name_lbl = QLabel()
         self.now_down_progress_lbl = QLabel()
 
-
         self.selectFlag = False
+        self.now_download_list = []
         #get backend handler: xer
-        self.xer = backend.Processer()
-        self.filelist = FileList(self.xer.getAllFiles())
+        self.xer = backend.Processer(self.processCallback,self)
+        #self.xer.registerCallback()
 
-        self.updateFileList()
+        self.filelist = FileList([],self)
+
+        self.xer.getAllFiles()
+        self.xer.getCurrentDir()
+        #self.updateFileList()
 
         #connect all slot
         self.downloadBtn.clicked.connect(self.DownloadClicked)
         self.selectAllBtn.clicked.connect(self.SelectAllClicked)
         self.filelist.fileListDoubleClicked.connect(self.FileListDoubleClicked)
 
+        self.updateFileListSignal.connect(self.updateFileList)
+        self.updateDirSignal.connect(self.updateDir)
+        self.changeDirSingal.connect(self.changeDir)
+        self.downloadFilesSignal.connect(self.downloadFiles)
+
         self.initUI()
+    def __del__(self):
+        del self.xer
 
     def initUI(self):
         god_vbox_main = QVBoxLayout()
@@ -232,13 +248,49 @@ class BaiUI(QWidget):
         self.mypan_vbox.addWidget(self.filelist)
 
         #create now download tab
+        self.now_down_vbox.addWidget(self.now_down_name_lbl)
         self.now_down_vbox.addWidget(self.now_down_progress_lbl)
-
         self.show()
 
-    def updateFileList(self):
-        self.filelist.updateFileList(self.xer.getAllFiles())
-        self.currentDirLbl.setText("当前目录： " + self.xer.getCurrentDir())
+    def updateFileList(self, list):
+        self.filelist.updateFileList(list)
+    def updateDir(self, str):
+        self.currentDirLbl.setText("当前目录： " + str)
+
+    def changeDir(self):
+        self.xer.getCurrentDir()
+        self.xer.getAllFiles()
+
+    def downloadFiles(self, result):
+        downid = result[0][8:]
+        log.debug("down_id: " + downid)
+        for r in result[1:]:
+            if "文件路径" in r:
+                #if self.now_download_list[downid] == None:
+                #    self.now_download_list.append([r])
+                #else:
+                #    self.now_download_list[downid] = [r]
+                self.now_down_name_lbl.setText(r)
+            if "[1] ↓" in r:
+                #if self.now_download_list[downid] == None:
+                #    if self.now_download_list[downid][1] == None:
+                #    self.now_download_list[downid][1].append()
+                self.now_down_progress_lbl.setText(r [r.rfind("[1] ↓"):] )
+
+
+    def processCallback(self, func, result):
+        log.debug("call processCallback")
+        log.debug(func)
+        log.debug(result)
+
+        if func == "getAllFiles" :
+            self.updateFileListSignal.emit(result)
+        if func == "getCurrentDir" :
+            self.updateDirSignal.emit(result)
+        if func == "changeDir" :
+            self.changeDirSingal.emit()
+        if func == "downloadFiles" :
+            self.downloadFilesSignal.emit(result)
 
     #SLOT EVENT#
     def DownloadClicked(self):
@@ -268,10 +320,12 @@ class BaiUI(QWidget):
         log.debug(dir)
         if dir != "":
             self.xer.changeDir(dir)
-            self.updateFileList()
         else :
             log.debug("start download " + line[4])
             self.xer.downloadFiles(line[4])
+    def closeEvent(self,event):
+        log.debug("closeEvent")
+        self.xer.closeAllThread()
 
 if __name__ == "__main__":
     log.debug("Program Start")

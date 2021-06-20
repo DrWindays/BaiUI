@@ -1,0 +1,9 @@
+2021-06-20 01:24:01,763 - BaiUI.py[line:303] - DEBUG: Program Start
+2021-06-20 01:24:02,976 - BaiUI.py[line:101] - DEBUG: []
+2021-06-20 01:24:02,990 - backend.py[line:118] - DEBUG: start Thread
+2021-06-20 01:24:02,992 - backend.py[line:118] - DEBUG: start Thread
+2021-06-20 01:24:03,587 - BaiUI.py[line:259] - DEBUG: call processCallback
+2021-06-20 01:24:03,588 - BaiUI.py[line:260] - DEBUG: getAllFiles
+2021-06-20 01:24:03,589 - BaiUI.py[line:261] - DEBUG: []
+2021-06-20 01:24:03,590 - BaiUI.py[line:101] - DEBUG: []
+2021-06-20 01:24:03,593 - backend.py[line:122] - DEBUG: end Thread

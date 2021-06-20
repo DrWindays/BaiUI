@@ -1,0 +1,22 @@
+2021-06-20 01:27:52,631 - BaiUI.py[line:303] - DEBUG: Program Start
+2021-06-20 01:27:53,839 - BaiUI.py[line:101] - DEBUG: []
+2021-06-20 01:27:53,853 - backend.py[line:119] - DEBUG: start Thread
+2021-06-20 01:27:53,855 - backend.py[line:119] - DEBUG: start Thread
+2021-06-20 01:27:54,026 - backend.py[line:79] - DEBUG: subprocess_execute b'/\n'
+2021-06-20 01:27:54,029 - BaiUI.py[line:259] - DEBUG: call processCallback
+2021-06-20 01:27:54,030 - BaiUI.py[line:260] - DEBUG: getCurrentDir
+2021-06-20 01:27:54,032 - BaiUI.py[line:261] - DEBUG: /
+2021-06-20 01:27:54,033 - backend.py[line:123] - DEBUG: end Thread
+2021-06-20 01:27:54,358 - backend.py[line:79] - DEBUG: subprocess_execute b'\n'
+2021-06-20 01:27:54,359 - backend.py[line:79] - DEBUG: subprocess_execute b'\xe5\xbd\x93\xe5\x89\x8d\xe7\x9b\xae\xe5\xbd\x95: /\n'
+2021-06-20 01:27:54,360 - backend.py[line:79] - DEBUG: subprocess_execute b'----\n'
+2021-06-20 01:27:54,361 - backend.py[line:79] - DEBUG: subprocess_execute b'  #  \xe6\x96\x87\xe4\xbb\xb6\xe5\xa4\xa7\xe5\xb0\x8f       \xe4\xbf\xae\xe6\x94\xb9\xe6\x97\xa5\xe6\x9c\x9f                   \xe6\x96\x87\xe4\xbb\xb6(\xe7\x9b\xae\xe5\xbd\x95)             \n'
+2021-06-20 01:27:54,362 - backend.py[line:79] - DEBUG: subprocess_execute b'  0         -  2021-05-30 13:03:42  \xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91/  \n'
+2021-06-20 01:27:54,362 - backend.py[line:79] - DEBUG: subprocess_execute b'  1         -  2021-06-01 20:44:16  \xe7\x99\xbe\xe5\xba\xa6\xe7\xbd\x91\xe7\x9b\x98\xe5\xad\xa6\xe9\x9c\xb8\xe5\xa4\xa7\xe7\xa4\xbc\xe5\x8c\x85/               \n'
+2021-06-20 01:27:54,363 - backend.py[line:79] - DEBUG: subprocess_execute b'       \xe6\x80\xbb: 0B                       \xe6\x96\x87\xe4\xbb\xb6\xe6\x80\xbb\xe6\x95\xb0: 0, \xe7\x9b\xae\xe5\xbd\x95\xe6\x80\xbb\xe6\x95\xb0: 2          \n'
+2021-06-20 01:27:54,365 - backend.py[line:79] - DEBUG: subprocess_execute b'----\n'
+2021-06-20 01:27:54,366 - BaiUI.py[line:259] - DEBUG: call processCallback
+2021-06-20 01:27:54,367 - BaiUI.py[line:260] - DEBUG: getAllFiles
+2021-06-20 01:27:54,368 - BaiUI.py[line:261] - DEBUG: [['0', '-', '2021-05-30', '13:03:42', '【树先生日语】2013-2018年N1音频/'], ['1', '-', '2021-06-01', '20:44:16', '百度网盘学霸大礼包/']]
+2021-06-20 01:27:54,369 - backend.py[line:123] - DEBUG: end Thread
+2021-06-20 01:27:54,370 - BaiUI.py[line:101] - DEBUG: [['0', '-', '2021-05-30', '13:03:42', '【树先生日语】2013-2018年N1音频/'], ['1', '-', '2021-06-01', '20:44:16', '百度网盘学霸大礼包/']]

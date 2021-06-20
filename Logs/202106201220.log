@@ -1,0 +1,62 @@
+2021-06-20 12:20:47,531 - BaiUI.py[line:304] - DEBUG: Program Start
+2021-06-20 12:20:48,737 - BaiUI.py[line:101] - DEBUG: []
+2021-06-20 12:20:48,752 - backend.py[line:132] - DEBUG: start Thread
+2021-06-20 12:20:48,753 - backend.py[line:132] - DEBUG: start Thread
+2021-06-20 12:20:48,936 - backend.py[line:79] - DEBUG: subprocess_execute b'/\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91\n'
+2021-06-20 12:20:48,939 - BaiUI.py[line:259] - DEBUG: call processCallback
+2021-06-20 12:20:48,940 - BaiUI.py[line:260] - DEBUG: getCurrentDir
+2021-06-20 12:20:48,941 - BaiUI.py[line:261] - DEBUG: /【树先生日语】2013-2018年N1音频
+2021-06-20 12:20:48,944 - backend.py[line:136] - DEBUG: end Thread
+2021-06-20 12:20:52,913 - backend.py[line:79] - DEBUG: subprocess_execute b'\n'
+2021-06-20 12:20:52,915 - backend.py[line:79] - DEBUG: subprocess_execute b'\xe5\xbd\x93\xe5\x89\x8d\xe7\x9b\xae\xe5\xbd\x95: /\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91\n'
+2021-06-20 12:20:52,916 - backend.py[line:79] - DEBUG: subprocess_execute b'----\n'
+2021-06-20 12:20:52,916 - backend.py[line:79] - DEBUG: subprocess_execute b'  #     \xe6\x96\x87\xe4\xbb\xb6\xe5\xa4\xa7\xe5\xb0\x8f         \xe4\xbf\xae\xe6\x94\xb9\xe6\x97\xa5\xe6\x9c\x9f                      \xe6\x96\x87\xe4\xbb\xb6(\xe7\x9b\xae\xe5\xbd\x95)                \n'
+2021-06-20 12:20:52,917 - backend.py[line:79] - DEBUG: subprocess_execute b'   0       24.62MB  2021-05-30 13:03:42  2013\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 12:20:52,917 - backend.py[line:79] - DEBUG: subprocess_execute b'   1       24.23MB  2021-05-30 13:03:42  2013\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 12:20:52,918 - backend.py[line:79] - DEBUG: subprocess_execute b'   2       24.77MB  2021-05-30 13:03:42  2014\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 12:20:52,919 - backend.py[line:79] - DEBUG: subprocess_execute b'   3       25.30MB  2021-05-30 13:03:43  2014\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 12:20:52,919 - backend.py[line:79] - DEBUG: subprocess_execute b'   4       25.44MB  2021-05-30 13:03:42  2015\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 12:20:52,920 - backend.py[line:79] - DEBUG: subprocess_execute b'   5       26.52MB  2021-05-30 13:03:42  2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 12:20:52,920 - backend.py[line:79] - DEBUG: subprocess_execute b'   6       26.21MB  2021-05-30 13:03:42  2016\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 12:20:52,921 - backend.py[line:79] - DEBUG: subprocess_execute b'   7       26.44MB  2021-05-30 13:03:42  2016\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 12:20:52,922 - backend.py[line:79] - DEBUG: subprocess_execute b'   8       25.94MB  2021-05-30 13:03:42  2017\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 12:20:52,922 - backend.py[line:79] - DEBUG: subprocess_execute b'   9       23.53MB  2021-05-30 13:03:43  2017\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 12:20:52,923 - backend.py[line:79] - DEBUG: subprocess_execute b'  10       24.63MB  2021-05-30 13:03:42  2018\xe5\xb9\xb412\xe6\x9c\x88N1\xe9\x9f\xb3\xe9\xa2\x91.mp3                    \n'
+2021-06-20 12:20:52,924 - backend.py[line:79] - DEBUG: subprocess_execute b'  11       23.60MB  2021-05-30 13:03:42  2018\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 12:20:52,925 - backend.py[line:79] - DEBUG: subprocess_execute b'  12      275.14KB  2021-05-30 13:03:42  \xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xadN1\xe3\x80\x91\xe5\xa4\x87\xe8\x80\x83\xe7\xad\x94\xe7\x96\x91\xe7\xbe\xa4\xe5\x92\x8c\xe5\x85\xac\xe4\xbc\x97\xe5\x8f\xb7.jpg  \n'
+2021-06-20 12:20:52,926 - backend.py[line:79] - DEBUG: subprocess_execute b'      \xe6\x80\xbb: 301.50MB                       \xe6\x96\x87\xe4\xbb\xb6\xe6\x80\xbb\xe6\x95\xb0: 13, \xe7\x9b\xae\xe5\xbd\x95\xe6\x80\xbb\xe6\x95\xb0: 0               \n'
+2021-06-20 12:20:52,926 - backend.py[line:79] - DEBUG: subprocess_execute b'----\n'
+2021-06-20 12:20:52,928 - BaiUI.py[line:259] - DEBUG: call processCallback
+2021-06-20 12:20:52,928 - BaiUI.py[line:260] - DEBUG: getAllFiles
+2021-06-20 12:20:52,929 - BaiUI.py[line:261] - DEBUG: [['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3'], ['1', '24.23MB', '2021-05-30', '13:03:42', '2013年7月N1.mp3'], ['2', '24.77MB', '2021-05-30', '13:03:42', '2014年12月N1.mp3'], ['3', '25.30MB', '2021-05-30', '13:03:43', '2014年7月N1.mp3'], ['4', '25.44MB', '2021-05-30', '13:03:42', '2015年12月N1.mp3'], ['5', '26.52MB', '2021-05-30', '13:03:42', '2015年7月N1.mp3'], ['6', '26.21MB', '2021-05-30', '13:03:42', '2016年12月N1.mp3'], ['7', '26.44MB', '2021-05-30', '13:03:42', '2016年7月N1.mp3'], ['8', '25.94MB', '2021-05-30', '13:03:42', '2017年12月N1.mp3'], ['9', '23.53MB', '2021-05-30', '13:03:43', '2017年7月N1.mp3'], ['10', '24.63MB', '2021-05-30', '13:03:42', '2018年12月N1音频.mp3'], ['11', '23.60MB', '2021-05-30', '13:03:42', '2018年7月N1.mp3'], ['12', '275.14KB', '2021-05-30', '13:03:42', '【树先生日语N1】备考答疑群和公众号.jpg']]
+2021-06-20 12:20:52,932 - backend.py[line:136] - DEBUG: end Thread
+2021-06-20 12:20:52,934 - BaiUI.py[line:101] - DEBUG: [['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3'], ['1', '24.23MB', '2021-05-30', '13:03:42', '2013年7月N1.mp3'], ['2', '24.77MB', '2021-05-30', '13:03:42', '2014年12月N1.mp3'], ['3', '25.30MB', '2021-05-30', '13:03:43', '2014年7月N1.mp3'], ['4', '25.44MB', '2021-05-30', '13:03:42', '2015年12月N1.mp3'], ['5', '26.52MB', '2021-05-30', '13:03:42', '2015年7月N1.mp3'], ['6', '26.21MB', '2021-05-30', '13:03:42', '2016年12月N1.mp3'], ['7', '26.44MB', '2021-05-30', '13:03:42', '2016年7月N1.mp3'], ['8', '25.94MB', '2021-05-30', '13:03:42', '2017年12月N1.mp3'], ['9', '23.53MB', '2021-05-30', '13:03:43', '2017年7月N1.mp3'], ['10', '24.63MB', '2021-05-30', '13:03:42', '2018年12月N1音频.mp3'], ['11', '23.60MB', '2021-05-30', '13:03:42', '2018年7月N1.mp3'], ['12', '275.14KB', '2021-05-30', '13:03:42', '【树先生日语N1】备考答疑群和公众号.jpg']]
+2021-06-20 12:20:56,908 - BaiUI.py[line:286] - DEBUG: ['5', '26.52MB', '2021-05-30', '13:03:42', '2015年7月N1.mp3']
+2021-06-20 12:20:56,909 - BaiUI.py[line:296] - DEBUG: 
+2021-06-20 12:20:56,910 - BaiUI.py[line:300] - DEBUG: start download 2015年7月N1.mp3
+2021-06-20 12:20:56,911 - backend.py[line:132] - DEBUG: start Thread
+2021-06-20 12:20:56,912 - backend.py[line:87] - DEBUG: subprocess_execute_realtime ./BaiduPCS-Go d 2015年7月N1.mp3
+2021-06-20 12:21:05,072 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'\n'
+2021-06-20 12:21:05,080 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'[0] \xe6\x8f\x90\xe7\xa4\xba: \xe5\xbd\x93\xe5\x89\x8d\xe4\xb8\x8b\xe8\xbd\xbd\xe6\x9c\x80\xe5\xa4\xa7\xe5\xb9\xb6\xe5\x8f\x91\xe9\x87\x8f\xe4\xb8\xba: 8, \xe4\xb8\x8b\xe8\xbd\xbd\xe7\xbc\x93\xe5\xad\x98\xe4\xb8\xba: 65536\n'
+2021-06-20 12:21:05,081 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'[1] \xe5\x8a\xa0\xe5\x85\xa5\xe4\xb8\x8b\xe8\xbd\xbd\xe9\x98\x9f\xe5\x88\x97: /\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91/2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3\n'
+2021-06-20 12:21:05,082 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'\n'
+2021-06-20 12:21:05,083 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'[1] ----\n'
+2021-06-20 12:21:05,084 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  \xe7\xb1\xbb\xe5\x9e\x8b              \xe6\x96\x87\xe4\xbb\xb6                                              \n'
+2021-06-20 12:21:05,087 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  \xe6\x96\x87\xe4\xbb\xb6\xe8\xb7\xaf\xe5\xbe\x84          /\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91/2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3  \n'
+2021-06-20 12:21:05,088 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  \xe6\x96\x87\xe4\xbb\xb6\xe5\x90\x8d\xe7\xa7\xb0          2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                                   \n'
+2021-06-20 12:21:05,088 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  \xe6\x96\x87\xe4\xbb\xb6\xe5\xa4\xa7\xe5\xb0\x8f          27812713, 26.524270MB                             \n'
+2021-06-20 12:21:05,089 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  md5 (\xe6\x88\xaa\xe5\x9b\xbe\xe8\xaf\xb7\xe6\x89\x93\xe7\xa0\x81)  7f89c53a46dfc93d613dc11cbc805ffa                  \n'
+2021-06-20 12:21:05,090 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  app_id            250528                                            \n'
+2021-06-20 12:21:05,091 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  fs_id             1012186118622746                                  \n'
+2021-06-20 12:21:05,091 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  \xe5\x88\x9b\xe5\xbb\xba\xe6\x97\xa5\xe6\x9c\x9f          2019-06-24 10:11:50                               \n'
+2021-06-20 12:21:05,092 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'  \xe4\xbf\xae\xe6\x94\xb9\xe6\x97\xa5\xe6\x9c\x9f          2021-05-30 13:03:42                               \n'
+2021-06-20 12:21:05,093 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'\n'
+2021-06-20 12:21:05,094 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'[1] \xe5\x87\x86\xe5\xa4\x87\xe4\xb8\x8b\xe8\xbd\xbd: /\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91/2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3\n'
+2021-06-20 12:21:05,095 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'[1] \xe5\xb0\x86\xe4\xbc\x9a\xe4\xb8\x8b\xe8\xbd\xbd\xe5\x88\xb0\xe8\xb7\xaf\xe5\xbe\x84: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3\n'
+2021-06-20 12:21:05,095 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'\n'
+2021-06-20 12:21:05,096 - backend.py[line:92] - DEBUG: subprocess_execute_realtime b'\r[1] \xe2\x86\x93 1.31MB/26.52MB 2.45MB/s in 1.31s, left 10s ............\r[1] \xe2\x86\x93 2.81MB/26.52MB 1.86MB/s in 2.31s, left 12s ............\r[1] \xe2\x86\x93 3.62MB/26.52MB 881.10KB/s in 3.31s, left 26s ............\r[1] \xe2\x86\x93 3.81MB/26.52MB 502.80KB/s in 4.31s, left 46s ............\r[1] \xe2\x86\x93 4.94MB/26.52MB 1.16MB/s in 5.31s, left 18s ............\r[1] \xe2\x86\x93 5.06MB/26.52MB 670.36KB/s in 6.31s, left 32s ............'
+2021-06-20 12:21:05,098 - backend.py[line:66] - DEBUG: ['\n', '[0] 提示: 当前下载最大并发量为: 8, 下载缓存为: 65536\n', '[1] 加入下载队列: /【树先生日语】2013-2018年N1音频/2015年7月N1.mp3\n', '\n', '[1] ----\n', '  类型              文件                                              \n', '  文件路径          /【树先生日语】2013-2018年N1音频/2015年7月N1.mp3  \n', '  文件名称          2015年7月N1.mp3                                   \n', '  文件大小          27812713, 26.524270MB                             \n', '  md5 (截图请打码)  7f89c53a46dfc93d613dc11cbc805ffa                  \n', '  app_id            250528                                            \n', '  fs_id             1012186118622746                                  \n', '  创建日期          2019-06-24 10:11:50                               \n', '  修改日期          2021-05-30 13:03:42                               \n', '\n', '[1] 准备下载: /【树先生日语】2013-2018年N1音频/2015年7月N1.mp3\n', '[1] 将会下载到路径: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2015年7月N1.mp3\n', '\n', '\r[1] ↓ 1.31MB/26.52MB 2.45MB/s in 1.31s, left 10s ............\r[1] ↓ 2.81MB/26.52MB 1.86MB/s in 2.31s, left 12s ............\r[1] ↓ 3.62MB/26.52MB 881.10KB/s in 3.31s, left 26s ............\r[1] ↓ 3.81MB/26.52MB 502.80KB/s in 4.31s, left 46s ............\r[1] ↓ 4.94MB/26.52MB 1.16MB/s in 5.31s, left 18s ............\r[1] ↓ 5.06MB/26.52MB 670.36KB/s in 6.31s, left 32s ............']
+2021-06-20 12:21:05,100 - BaiUI.py[line:259] - DEBUG: call processCallback
+2021-06-20 12:21:05,100 - BaiUI.py[line:260] - DEBUG: downloadFiles
+2021-06-20 12:21:05,101 - BaiUI.py[line:261] - DEBUG: None
+2021-06-20 12:21:05,102 - backend.py[line:136] - DEBUG: end Thread

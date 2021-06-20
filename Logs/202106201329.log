@@ -1,0 +1,221 @@
+2021-06-20 13:29:57,209 - BaiUI.py[line:309] - DEBUG: Program Start
+2021-06-20 13:29:58,430 - BaiUI.py[line:101] - DEBUG: []
+2021-06-20 13:29:58,446 - backend.py[line:140] - DEBUG: start Thread
+2021-06-20 13:29:58,448 - backend.py[line:140] - DEBUG: start Thread
+2021-06-20 13:29:58,662 - backend.py[line:85] - DEBUG: subprocess_execute b'/\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91\n'
+2021-06-20 13:29:58,686 - BaiUI.py[line:261] - DEBUG: call processCallback
+2021-06-20 13:29:58,693 - BaiUI.py[line:262] - DEBUG: getCurrentDir
+2021-06-20 13:29:58,694 - BaiUI.py[line:263] - DEBUG: /【树先生日语】2013-2018年N1音频
+2021-06-20 13:29:58,696 - backend.py[line:144] - DEBUG: end Thread
+2021-06-20 13:29:59,069 - backend.py[line:85] - DEBUG: subprocess_execute b'\n'
+2021-06-20 13:29:59,070 - backend.py[line:85] - DEBUG: subprocess_execute b'\xe5\xbd\x93\xe5\x89\x8d\xe7\x9b\xae\xe5\xbd\x95: /\xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xad\xe3\x80\x912013-2018\xe5\xb9\xb4N1\xe9\x9f\xb3\xe9\xa2\x91\n'
+2021-06-20 13:29:59,071 - backend.py[line:85] - DEBUG: subprocess_execute b'----\n'
+2021-06-20 13:29:59,072 - backend.py[line:85] - DEBUG: subprocess_execute b'  #     \xe6\x96\x87\xe4\xbb\xb6\xe5\xa4\xa7\xe5\xb0\x8f         \xe4\xbf\xae\xe6\x94\xb9\xe6\x97\xa5\xe6\x9c\x9f                      \xe6\x96\x87\xe4\xbb\xb6(\xe7\x9b\xae\xe5\xbd\x95)                \n'
+2021-06-20 13:29:59,073 - backend.py[line:85] - DEBUG: subprocess_execute b'   0       24.62MB  2021-05-30 13:03:42  2013\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 13:29:59,073 - backend.py[line:85] - DEBUG: subprocess_execute b'   1       24.23MB  2021-05-30 13:03:42  2013\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 13:29:59,074 - backend.py[line:85] - DEBUG: subprocess_execute b'   2       24.77MB  2021-05-30 13:03:42  2014\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 13:29:59,074 - backend.py[line:85] - DEBUG: subprocess_execute b'   3       25.30MB  2021-05-30 13:03:43  2014\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 13:29:59,075 - backend.py[line:85] - DEBUG: subprocess_execute b'   4       25.44MB  2021-05-30 13:03:42  2015\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 13:29:59,076 - backend.py[line:85] - DEBUG: subprocess_execute b'   5       26.52MB  2021-05-30 13:03:42  2015\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 13:29:59,077 - backend.py[line:85] - DEBUG: subprocess_execute b'   6       26.21MB  2021-05-30 13:03:42  2016\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 13:29:59,077 - backend.py[line:85] - DEBUG: subprocess_execute b'   7       26.44MB  2021-05-30 13:03:42  2016\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 13:29:59,078 - backend.py[line:85] - DEBUG: subprocess_execute b'   8       25.94MB  2021-05-30 13:03:42  2017\xe5\xb9\xb412\xe6\x9c\x88N1.mp3                        \n'
+2021-06-20 13:29:59,079 - backend.py[line:85] - DEBUG: subprocess_execute b'   9       23.53MB  2021-05-30 13:03:43  2017\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 13:29:59,079 - backend.py[line:85] - DEBUG: subprocess_execute b'  10       24.63MB  2021-05-30 13:03:42  2018\xe5\xb9\xb412\xe6\x9c\x88N1\xe9\x9f\xb3\xe9\xa2\x91.mp3                    \n'
+2021-06-20 13:29:59,080 - backend.py[line:85] - DEBUG: subprocess_execute b'  11       23.60MB  2021-05-30 13:03:42  2018\xe5\xb9\xb47\xe6\x9c\x88N1.mp3                         \n'
+2021-06-20 13:29:59,080 - backend.py[line:85] - DEBUG: subprocess_execute b'  12      275.14KB  2021-05-30 13:03:42  \xe3\x80\x90\xe6\xa0\x91\xe5\x85\x88\xe7\x94\x9f\xe6\x97\xa5\xe8\xaf\xadN1\xe3\x80\x91\xe5\xa4\x87\xe8\x80\x83\xe7\xad\x94\xe7\x96\x91\xe7\xbe\xa4\xe5\x92\x8c\xe5\x85\xac\xe4\xbc\x97\xe5\x8f\xb7.jpg  \n'
+2021-06-20 13:29:59,081 - backend.py[line:85] - DEBUG: subprocess_execute b'      \xe6\x80\xbb: 301.50MB                       \xe6\x96\x87\xe4\xbb\xb6\xe6\x80\xbb\xe6\x95\xb0: 13, \xe7\x9b\xae\xe5\xbd\x95\xe6\x80\xbb\xe6\x95\xb0: 0               \n'
+2021-06-20 13:29:59,082 - backend.py[line:85] - DEBUG: subprocess_execute b'----\n'
+2021-06-20 13:29:59,083 - BaiUI.py[line:261] - DEBUG: call processCallback
+2021-06-20 13:29:59,084 - BaiUI.py[line:262] - DEBUG: getAllFiles
+2021-06-20 13:29:59,085 - BaiUI.py[line:263] - DEBUG: [['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3'], ['1', '24.23MB', '2021-05-30', '13:03:42', '2013年7月N1.mp3'], ['2', '24.77MB', '2021-05-30', '13:03:42', '2014年12月N1.mp3'], ['3', '25.30MB', '2021-05-30', '13:03:43', '2014年7月N1.mp3'], ['4', '25.44MB', '2021-05-30', '13:03:42', '2015年12月N1.mp3'], ['5', '26.52MB', '2021-05-30', '13:03:42', '2015年7月N1.mp3'], ['6', '26.21MB', '2021-05-30', '13:03:42', '2016年12月N1.mp3'], ['7', '26.44MB', '2021-05-30', '13:03:42', '2016年7月N1.mp3'], ['8', '25.94MB', '2021-05-30', '13:03:42', '2017年12月N1.mp3'], ['9', '23.53MB', '2021-05-30', '13:03:43', '2017年7月N1.mp3'], ['10', '24.63MB', '2021-05-30', '13:03:42', '2018年12月N1音频.mp3'], ['11', '23.60MB', '2021-05-30', '13:03:42', '2018年7月N1.mp3'], ['12', '275.14KB', '2021-05-30', '13:03:42', '【树先生日语N1】备考答疑群和公众号.jpg']]
+2021-06-20 13:29:59,087 - backend.py[line:144] - DEBUG: end Thread
+2021-06-20 13:29:59,089 - BaiUI.py[line:101] - DEBUG: [['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3'], ['1', '24.23MB', '2021-05-30', '13:03:42', '2013年7月N1.mp3'], ['2', '24.77MB', '2021-05-30', '13:03:42', '2014年12月N1.mp3'], ['3', '25.30MB', '2021-05-30', '13:03:43', '2014年7月N1.mp3'], ['4', '25.44MB', '2021-05-30', '13:03:42', '2015年12月N1.mp3'], ['5', '26.52MB', '2021-05-30', '13:03:42', '2015年7月N1.mp3'], ['6', '26.21MB', '2021-05-30', '13:03:42', '2016年12月N1.mp3'], ['7', '26.44MB', '2021-05-30', '13:03:42', '2016年7月N1.mp3'], ['8', '25.94MB', '2021-05-30', '13:03:42', '2017年12月N1.mp3'], ['9', '23.53MB', '2021-05-30', '13:03:43', '2017年7月N1.mp3'], ['10', '24.63MB', '2021-05-30', '13:03:42', '2018年12月N1音频.mp3'], ['11', '23.60MB', '2021-05-30', '13:03:42', '2018年7月N1.mp3'], ['12', '275.14KB', '2021-05-30', '13:03:42', '【树先生日语N1】备考答疑群和公众号.jpg']]
+2021-06-20 13:30:01,411 - BaiUI.py[line:288] - DEBUG: ['4', '25.44MB', '2021-05-30', '13:03:42', '2015年12月N1.mp3']
+2021-06-20 13:30:01,412 - BaiUI.py[line:298] - DEBUG: 
+2021-06-20 13:30:01,413 - BaiUI.py[line:302] - DEBUG: start download 2015年12月N1.mp3
+2021-06-20 13:30:01,415 - backend.py[line:140] - DEBUG: start Thread
+2021-06-20 13:30:01,416 - backend.py[line:93] - DEBUG: subprocess_execute_realtime ./BaiduPCS-Go d 2015年12月N1.mp3
+2021-06-20 13:30:02,733 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:02,734 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [0] 提示: 当前下载最大并发量为: 8, 下载缓存为: 65536
+
+2021-06-20 13:30:02,735 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 加入下载队列: /【树先生日语】2013-2018年N1音频/2015年12月N1.mp3
+
+2021-06-20 13:30:02,736 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:02,737 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] ----
+
+2021-06-20 13:30:02,737 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   类型              文件                                               
+
+2021-06-20 13:30:02,738 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件路径          /【树先生日语】2013-2018年N1音频/2015年12月N1.mp3  
+
+2021-06-20 13:30:02,738 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件名称          2015年12月N1.mp3                                   
+
+2021-06-20 13:30:02,739 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件大小          26677129, 25.441293MB                              
+
+2021-06-20 13:30:02,740 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   md5 (截图请打码)  fb825b86d085aad76ca5bf08bfa4eec3                   
+
+2021-06-20 13:30:02,740 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   app_id            250528                                             
+
+2021-06-20 13:30:02,741 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   fs_id             924171188847722                                    
+
+2021-06-20 13:30:02,742 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   创建日期          2019-06-24 10:11:56                                
+
+2021-06-20 13:30:02,742 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   修改日期          2021-05-30 13:03:42                                
+
+2021-06-20 13:30:02,743 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:02,743 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 准备下载: /【树先生日语】2013-2018年N1音频/2015年12月N1.mp3
+
+2021-06-20 13:30:02,744 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 文件已经存在: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2015年12月N1.mp3, 跳过...
+
+2021-06-20 13:30:02,745 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:02,746 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 下载结束, 时间: 2ms, 数据总量: 0B
+
+2021-06-20 13:30:09,461 - BaiUI.py[line:288] - DEBUG: ['10', '24.63MB', '2021-05-30', '13:03:42', '2018年12月N1音频.mp3']
+2021-06-20 13:30:09,463 - BaiUI.py[line:298] - DEBUG: 
+2021-06-20 13:30:09,464 - BaiUI.py[line:302] - DEBUG: start download 2018年12月N1音频.mp3
+2021-06-20 13:30:09,465 - backend.py[line:140] - DEBUG: start Thread
+2021-06-20 13:30:09,468 - backend.py[line:93] - DEBUG: subprocess_execute_realtime ./BaiduPCS-Go d 2018年12月N1音频.mp3
+2021-06-20 13:30:09,995 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:10,002 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [0] 提示: 当前下载最大并发量为: 8, 下载缓存为: 65536
+
+2021-06-20 13:30:10,003 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 加入下载队列: /【树先生日语】2013-2018年N1音频/2018年12月N1音频.mp3
+
+2021-06-20 13:30:10,016 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:10,017 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] ----
+
+2021-06-20 13:30:10,018 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   类型              文件                                                   
+
+2021-06-20 13:30:10,019 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件路径          /【树先生日语】2013-2018年N1音频/2018年12月N1音频.mp3  
+
+2021-06-20 13:30:10,019 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件名称          2018年12月N1音频.mp3                                   
+
+2021-06-20 13:30:10,020 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件大小          25828595, 24.632068MB                                  
+
+2021-06-20 13:30:10,021 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   md5 (截图请打码)  e8f0e1cb9b11e8048e6f4389069a141f                       
+
+2021-06-20 13:30:10,022 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   app_id            250528                                                 
+
+2021-06-20 13:30:10,022 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   fs_id             124642340433284                                        
+
+2021-06-20 13:30:10,023 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   创建日期          2019-06-24 10:12:35                                    
+
+2021-06-20 13:30:10,024 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   修改日期          2021-05-30 13:03:42                                    
+
+2021-06-20 13:30:10,025 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:10,026 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 准备下载: /【树先生日语】2013-2018年N1音频/2018年12月N1音频.mp3
+
+2021-06-20 13:30:10,027 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 文件已经存在: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2018年12月N1音频.mp3, 跳过...
+
+2021-06-20 13:30:10,028 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:10,029 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 下载结束, 时间: 2ms, 数据总量: 0B
+
+2021-06-20 13:30:15,173 - BaiUI.py[line:288] - DEBUG: ['9', '23.53MB', '2021-05-30', '13:03:43', '2017年7月N1.mp3']
+2021-06-20 13:30:15,175 - BaiUI.py[line:298] - DEBUG: 
+2021-06-20 13:30:15,180 - BaiUI.py[line:302] - DEBUG: start download 2017年7月N1.mp3
+2021-06-20 13:30:15,203 - backend.py[line:140] - DEBUG: start Thread
+2021-06-20 13:30:15,213 - backend.py[line:93] - DEBUG: subprocess_execute_realtime ./BaiduPCS-Go d 2017年7月N1.mp3
+2021-06-20 13:30:15,692 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:15,694 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [0] 提示: 当前下载最大并发量为: 8, 下载缓存为: 65536
+
+2021-06-20 13:30:15,695 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 加入下载队列: /【树先生日语】2013-2018年N1音频/2017年7月N1.mp3
+
+2021-06-20 13:30:15,697 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:15,698 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] ----
+
+2021-06-20 13:30:15,699 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   类型              文件                                              
+
+2021-06-20 13:30:15,700 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件路径          /【树先生日语】2013-2018年N1音频/2017年7月N1.mp3  
+
+2021-06-20 13:30:15,701 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件名称          2017年7月N1.mp3                                   
+
+2021-06-20 13:30:15,702 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件大小          24671700, 23.528767MB                             
+
+2021-06-20 13:30:15,710 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   md5 (截图请打码)  c53afa4b9f8cd5acf03a3955ac6d8471                  
+
+2021-06-20 13:30:15,714 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   app_id            250528                                            
+
+2021-06-20 13:30:15,716 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   fs_id             46668516564956                                    
+
+2021-06-20 13:30:15,720 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   创建日期          2019-06-24 10:12:14                               
+
+2021-06-20 13:30:15,722 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   修改日期          2021-05-30 13:03:43                               
+
+2021-06-20 13:30:15,724 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:15,735 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 准备下载: /【树先生日语】2013-2018年N1音频/2017年7月N1.mp3
+
+2021-06-20 13:30:15,737 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 文件已经存在: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2017年7月N1.mp3, 跳过...
+
+2021-06-20 13:30:15,739 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:30:15,741 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 下载结束, 时间: 2ms, 数据总量: 0B
+
+2021-06-20 13:30:23,384 - BaiUI.py[line:288] - DEBUG: ['6', '26.21MB', '2021-05-30', '13:03:42', '2016年12月N1.mp3']
+2021-06-20 13:30:23,395 - BaiUI.py[line:298] - DEBUG: 
+2021-06-20 13:30:23,415 - BaiUI.py[line:302] - DEBUG: start download 2016年12月N1.mp3
+2021-06-20 13:30:23,432 - backend.py[line:140] - DEBUG: start Thread
+2021-06-20 13:30:23,437 - backend.py[line:93] - DEBUG: subprocess_execute_realtime ./BaiduPCS-Go d 2016年12月N1.mp3
+2021-06-20 13:30:42,497 - BaiUI.py[line:305] - DEBUG: closeEvent
+2021-06-20 13:30:42,500 - backend.py[line:41] - DEBUG: closeAllThread
+2021-06-20 13:30:42,516 - backend.py[line:47] - ERROR: not exist thread
+2021-06-20 13:30:42,518 - backend.py[line:47] - ERROR: not exist thread
+2021-06-20 13:30:42,519 - backend.py[line:47] - ERROR: not exist thread
+2021-06-20 13:30:42,525 - backend.py[line:47] - ERROR: not exist thread
+2021-06-20 13:30:42,536 - backend.py[line:47] - ERROR: not exist thread
+2021-06-20 13:30:42,544 - backend.py[line:47] - ERROR: not exist thread
+2021-06-20 13:31:19,817 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:31:19,819 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [0] 提示: 当前下载最大并发量为: 8, 下载缓存为: 65536
+
+2021-06-20 13:31:19,821 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 加入下载队列: /【树先生日语】2013-2018年N1音频/2016年12月N1.mp3
+
+2021-06-20 13:31:19,822 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:31:19,824 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] ----
+
+2021-06-20 13:31:19,825 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   类型              文件                                               
+
+2021-06-20 13:31:19,827 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件路径          /【树先生日语】2013-2018年N1音频/2016年12月N1.mp3  
+
+2021-06-20 13:31:19,828 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件名称          2016年12月N1.mp3                                   
+
+2021-06-20 13:31:19,834 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   文件大小          27484596, 26.211353MB                              
+
+2021-06-20 13:31:19,837 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   md5 (截图请打码)  352355735d7e6d26715a3f8966651f45                   
+
+2021-06-20 13:31:19,839 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   app_id            250528                                             
+
+2021-06-20 13:31:19,841 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   fs_id             163909533819700                                    
+
+2021-06-20 13:31:19,842 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   创建日期          2019-06-24 10:12:08                                
+
+2021-06-20 13:31:19,842 - backend.py[line:100] - DEBUG: subprocess_execute_realtime   修改日期          2021-05-30 13:03:42                                
+
+2021-06-20 13:31:19,843 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:31:19,845 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 准备下载: /【树先生日语】2013-2018年N1音频/2016年12月N1.mp3
+
+2021-06-20 13:31:19,847 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 将会下载到路径: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2016年12月N1.mp3
+
+2021-06-20 13:31:19,849 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:31:19,850 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] ↓ 4.69MB/26.21MB 2.13MB/s in 1s, left 10s ............[1] ↓ 5.50MB/26.21MB 1.37MB/s in 2s, left 15s ............[1] ↓ 7.06MB/26.21MB 1.50MB/s in 3s, left 12s ............[1] ↓ 8.81MB/26.21MB 1.61MB/s in 4s, left 10s ............[1] ↓ 10.81MB/26.21MB 2.02MB/s in 5s, left 7s ............[1] ↓ 11.88MB/26.21MB 1.56MB/s in 6s, left 9s ............[1] ↓ 11.88MB/26.21MB 1.56MB/s in 7s, left 9s ............[1] ↓ 11.88MB/26.21MB 1.56MB/s in 8s, left 9s ............[1] ↓ 11.88MB/26.21MB 1.56MB/s in 9s, left 9s ............[1] ↓ 11.88MB/26.21MB 1.56MB/s in 10s, left 9s ............[1] ↓ 11.88MB/26.21MB 1.56MB/s in 11s, left 9s ............[1] ↓ 12.25MB/26.21MB 716.94KB/s in 12s, left 19s ............[1] ↓ 12.25MB/26.21MB 258.40KB/s in 13s, left 55s ............[1] ↓ 12.33MB/26.21MB 0B/s in 14.01s, left - ............[1] ↓ 12.33MB/26.21MB 0B/s in 15s, left - ............[1] ↓ 12.33MB/26.21MB 0B/s in 16s, left - ............[1] ↓ 12.46MB/26.21MB 16.16KB/s in 17s, left 14m31s ............[1] ↓ 12.46MB/26.21MB 80.81KB/s in 18s, left 2m54s ............[1] ↓ 12.83MB/26.21MB 242.43KB/s in 19s, left 56s ............[1] ↓ 12.83MB/26.21MB 0B/s in 20s, left - ............[1] ↓ 12.83MB/26.21MB 0B/s in 21s, left - ............[1] ↓ 12.83MB/26.21MB 0B/s in 22s, left - ............[1] ↓ 12.83MB/26.21MB 0B/s in 23s, left - ............[1] ↓ 12.96MB/26.21MB 113.14KB/s in 24s, left 1m59s ............[1] ↓ 13.33MB/26.21MB 56.57KB/s in 25s, left 3m53s ............[1] ↓ 13.33MB/26.21MB 404.04KB/s in 26s, left 32s ............[1] ↓ 13.33MB/26.21MB 202.02KB/s in 27s, left 1m5s ............[1] ↓ 13.33MB/26.21MB 0B/s in 28s, left - ............[1] ↓ 13.33MB/26.21MB 0B/s in 29s, left - ............[1] ↓ 13.39MB/26.21MB 0B/s in 30s, left - ............[1] ↓ 13.77MB/26.21MB 145.13KB/s in 31s, left 1m27s ............[1] ↓ 13.77MB/26.21MB 162.28KB/s in 32s, left 1m18s ............[1] ↓ 13.77MB/26.21MB 81.14KB/s in 33s, left 2m37s ............[1] ↓ 13.77MB/26.21MB 0B/s in 34s, left - ............[1] ↓ 13.77MB/26.21MB 0B/s in 35s, left - ............[1] ↓ 13.89MB/26.21MB 0B/s in 36s, left - ............[1] ↓ 13.89MB/26.21MB 56.57KB/s in 37s, left 3m42s ............[1] ↓ 14.27MB/26.21MB 404.10KB/s in 38s, left 30s ............[1] ↓ 14.27MB/26.21MB 202.01KB/s in 39s, left 1m0s ............[1] ↓ 14.27MB/26.21MB 0B/s in 40s, left - ............[1] ↓ 16.95MB/26.21MB 1.03MB/s in 41s, left 9s ............[1] ↓ 17.14MB/26.21MB 1012.79KB/s in 42s, left 9s ............[1] ↓ 17.76MB/26.21MB 506.38KB/s in 43s, left 17s ............[1] ↓ 20.07MB/26.21MB 2.15MB/s in 44s, left 2s ............[1] ↓ 20.07MB/26.21MB 1.50MB/s in 45s, left 4s ............[1] ↓ 20.96MB/26.21MB 0B/s in 46s, left - ............[1] ↓ 22.23MB/26.21MB 751.52KB/s in 47s, left 5s ............[1] ↓ 22.27MB/26.21MB 664.42KB/s in 48s, left 6s ............[1] ↓ 22.40MB/26.21MB 340.29KB/s in 49s, left 11s ............[1] ↓ 23.32MB/26.21MB 113.14KB/s in 50s, left 26s ............[1] ↓ 25.27MB/26.21MB 1.21MB/s in 51s, left 0s ............[1] ↓ 25.27MB/26.21MB 569.80KB/s in 52s, left 1s ............[1] ↓ 25.27MB/26.21MB 284.88KB/s in 53s, left 3s ............[1] ↓ 26.02MB/26.21MB 0B/s in 54s, left - ............[1] ↓ 26.21MB/26.21MB 468.68KB/s in 55s, left 0s ............
+
+2021-06-20 13:31:19,852 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 下载完成, 保存位置: /mnt/usb/BaiduDownload/4733703127_linuxeroero/2016年12月N1.mp3
+
+2021-06-20 13:31:19,855 - backend.py[line:100] - DEBUG: subprocess_execute_realtime [1] 跳过文件有效性检验
+
+2021-06-20 13:31:19,856 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 
+
+2021-06-20 13:31:19,857 - backend.py[line:100] - DEBUG: subprocess_execute_realtime 下载结束, 时间: 55.697s, 数据总量: 26.211353MB
+

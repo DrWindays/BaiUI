@@ -1,0 +1,4 @@
+2021-06-20 12:05:22,357 - BaiUI.py[line:303] - DEBUG: Program Start
+2021-06-20 12:05:23,555 - BaiUI.py[line:101] - DEBUG: []
+2021-06-20 12:05:23,571 - backend.py[line:131] - DEBUG: start Thread
+2021-06-20 12:05:23,579 - backend.py[line:131] - DEBUG: start Thread

@@ -22,7 +22,7 @@ from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QC
 from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget
 from PyQt5.QtGui import QTextCursor, QIcon,QPainter
 from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView,QProgressBar
 from PyQt5.QtCore import QRect,QPoint
 import sys,os,subprocess
 import backend
@@ -67,27 +67,32 @@ class BaiTabBar(QTabBar):
             painter.drawControl(QStyle.CE_TabBarTabLabel,opt)
             painter.restore()
 
-class FileItem(QWidget):
-    def __init__(self, id, name, size, date, time):
+class DownloadFileItem(QWidget):
+    def __init__(self, downid, name):
         super().__init__()
 
-        self.mainwidget = QWidget()
+        #self.mainwidget = QWidget()
         self.hbox = QHBoxLayout()
         self.setLayout(self.hbox)
 
-        self.checkbox = QCheckBox()
-        self.idlbl = QLabel(id)
+        self.downid = downid
+        #self.checkbox = QCheckBox()
+        #self.idlbl = QLabel(id)
         self.namelbl = QLabel(name)
-        self.sizelbl = QLabel(size)
-        self.timelbl = QLabel(date+' '+time)
+        self.progresslbl = QLabel()
+        self.progressbar = QProgressBar(self)
+        self.progressbar.step = 0
+        self.statuslbl = QLabel('正在下载')
 
-        self.hbox.addWidget(self.checkbox)
-        self.hbox.addWidget(self.idlbl)
         self.hbox.addWidget(self.namelbl)
-        self.hbox.addWidget(self.sizelbl)
-        self.hbox.addWidget(self.timelbl)
+        self.hbox.addWidget(self.progresslbl)
+        self.hbox.addWidget(self.statuslbl)
+    def getDownID(self):
+        return self.downid
+    def updateProgress(self,progress_str):
+        self.progresslbl.setText(progress_str)
 
-        self.currentDir = ""
+
 
 class FileList(QTableWidget):
     fileListDoubleClicked = QtCore.pyqtSignal(list)
@@ -181,8 +186,8 @@ class BaiUI(QWidget):
         self.mypan_tab = QWidget()
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
-        self.now_down_name_lbl = QLabel()
-        self.now_down_progress_lbl = QLabel()
+
+        self.now_down_vbox.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
         self.selectFlag = False
         self.now_download_list = []
@@ -251,9 +256,24 @@ class BaiUI(QWidget):
         self.mypan_vbox.addWidget(self.filelist)
 
         #create now download tab
-        self.now_down_vbox.addWidget(self.now_down_name_lbl)
-        self.now_down_vbox.addWidget(self.now_down_progress_lbl)
         self.show()
+
+    def addDownloadItem(self, downid, name):
+        downitem = DownloadFileItem(downid,name)
+        self.now_download_list.append(downitem)
+        self.now_down_vbox.addWidget(downitem)
+
+    def isDownloadItemExist(self, downid):
+        for item in self.now_download_list:
+            if item.getDownID() == downid:
+                return True
+        return False
+
+    def updateProgress(self, downid, progress_str):
+        for item in self.now_download_list:
+            if item.getDownID() == downid:
+                item.updateProgress(progress_str)
+                break
 
     def updateFileList(self, list):
         self.filelist.updateFileList(list)
@@ -268,23 +288,25 @@ class BaiUI(QWidget):
         downid = result[0][8:]
         log.debug("down_id: " + downid)
         for r in result[1:]:
-            if "文件路径" in r:
+            if "文件名称" in r:
                 #if self.now_download_list[downid] == None:
                 #    self.now_download_list.append([r])
                 #else:
                 #    self.now_download_list[downid] = [r]
-                self.now_down_name_lbl.setText(r)
+                if self.isDownloadItemExist(downid) == False:
+                    self.addDownloadItem(downid, r[ r.find("文件名称") + 4: ])
             if "[1] ↓" in r:
                 #if self.now_download_list[downid] == None:
                 #    if self.now_download_list[downid][1] == None:
                 #    self.now_download_list[downid][1].append()
-                self.now_down_progress_lbl.setText(r [r.rfind("[1] ↓"):] )
+                #self.now_down_progress_lbl.setText(r [r.rfind("[1] ↓"):] )
+                self.updateProgress(downid, r [r.rfind("[1] ↓"):] )
 
 
     def processCallback(self, func, result):
         log.debug("call processCallback")
         log.debug(func)
-        log.debug(result)
+        log.debug(result[len(result)-1])
 
         if func == "getAllFiles" :
             self.updateFileListSignal.emit(result)

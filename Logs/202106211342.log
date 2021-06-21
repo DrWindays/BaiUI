@@ -1,0 +1,55 @@
+2021-06-21 13:42:42,979 - backend.py[line:17] - DEBUG: Hello Linux
+2021-06-21 13:42:42,984 - BaiUI.py[line:350] - DEBUG: Program Start
+2021-06-21 13:42:44,185 - BaiUI.py[line:110] - DEBUG: []
+2021-06-21 13:42:44,200 - backend.py[line:177] - DEBUG: start Thread: getAllFiles
+2021-06-21 13:42:44,203 - backend.py[line:177] - DEBUG: start Thread: getCurrentDir
+2021-06-21 13:42:44,359 - backend.py[line:103] - DEBUG: ./BaiduPCS-Go pwd
+2021-06-21 13:42:44,360 - backend.py[line:105] - DEBUG: subprocess_execute /【树先生日语】2013-2018年N1音频
+
+2021-06-21 13:42:44,361 - BaiUI.py[line:301] - DEBUG: call processCallback
+2021-06-21 13:42:44,362 - BaiUI.py[line:302] - DEBUG: getCurrentDir
+2021-06-21 13:42:44,365 - BaiUI.py[line:303] - DEBUG: /【树先生日语】2013-2018年N1音频
+2021-06-21 13:42:44,366 - backend.py[line:182] - DEBUG: end Thread
+2021-06-21 13:42:44,698 - backend.py[line:103] - DEBUG: ./BaiduPCS-Go ls
+2021-06-21 13:42:44,699 - backend.py[line:105] - DEBUG: subprocess_execute 
+
+2021-06-21 13:42:44,700 - backend.py[line:105] - DEBUG: subprocess_execute 当前目录: /【树先生日语】2013-2018年N1音频
+
+2021-06-21 13:42:44,701 - backend.py[line:105] - DEBUG: subprocess_execute ----
+
+2021-06-21 13:42:44,702 - backend.py[line:105] - DEBUG: subprocess_execute   #     文件大小         修改日期                      文件(目录)                
+
+2021-06-21 13:42:44,703 - backend.py[line:105] - DEBUG: subprocess_execute    0       24.62MB  2021-05-30 13:03:42  2013年12月N1.mp3                        
+
+2021-06-21 13:42:44,704 - backend.py[line:105] - DEBUG: subprocess_execute    1       24.23MB  2021-05-30 13:03:42  2013年7月N1.mp3                         
+
+2021-06-21 13:42:44,705 - backend.py[line:105] - DEBUG: subprocess_execute    2       24.77MB  2021-05-30 13:03:42  2014年12月N1.mp3                        
+
+2021-06-21 13:42:44,706 - backend.py[line:105] - DEBUG: subprocess_execute    3       25.30MB  2021-05-30 13:03:43  2014年7月N1.mp3                         
+
+2021-06-21 13:42:44,707 - backend.py[line:105] - DEBUG: subprocess_execute    4       25.44MB  2021-05-30 13:03:42  2015年12月N1.mp3                        
+
+2021-06-21 13:42:44,708 - backend.py[line:105] - DEBUG: subprocess_execute    5       26.52MB  2021-05-30 13:03:42  2015年7月N1.mp3                         
+
+2021-06-21 13:42:44,708 - backend.py[line:105] - DEBUG: subprocess_execute    6       26.21MB  2021-05-30 13:03:42  2016年12月N1.mp3                        
+
+2021-06-21 13:42:44,709 - backend.py[line:105] - DEBUG: subprocess_execute    7       26.44MB  2021-05-30 13:03:42  2016年7月N1.mp3                         
+
+2021-06-21 13:42:44,710 - backend.py[line:105] - DEBUG: subprocess_execute    8       25.94MB  2021-05-30 13:03:42  2017年12月N1.mp3                        
+
+2021-06-21 13:42:44,711 - backend.py[line:105] - DEBUG: subprocess_execute    9       23.53MB  2021-05-30 13:03:43  2017年7月N1.mp3                         
+
+2021-06-21 13:42:44,712 - backend.py[line:105] - DEBUG: subprocess_execute   10       24.63MB  2021-05-30 13:03:42  2018年12月N1音频.mp3                    
+
+2021-06-21 13:42:44,712 - backend.py[line:105] - DEBUG: subprocess_execute   11       23.60MB  2021-05-30 13:03:42  2018年7月N1.mp3                         
+
+2021-06-21 13:42:44,713 - backend.py[line:105] - DEBUG: subprocess_execute   12      275.14KB  2021-05-30 13:03:42  【树先生日语N1】备考答疑群和公众号.jpg  
+
+2021-06-21 13:42:44,714 - backend.py[line:105] - DEBUG: subprocess_execute       总: 301.50MB                       文件总数: 13, 目录总数: 0               
+
+2021-06-21 13:42:44,715 - backend.py[line:105] - DEBUG: subprocess_execute ----
+
+2021-06-21 13:42:44,717 - BaiUI.py[line:301] - DEBUG: call processCallback
+2021-06-21 13:42:44,719 - BaiUI.py[line:302] - DEBUG: getAllFiles
+2021-06-21 13:42:44,720 - BaiUI.py[line:303] - DEBUG: [['0', '24.62MB', '2021-05-30', '13:03:42', '2013年12月N1.mp3'], ['1', '24.23MB', '2021-05-30', '13:03:42', '2013年7月N1.mp3'], ['2', '24.77MB', '2021-05-30', '13:03:42', '2014年12月N1.mp3'], ['3', '25.30MB', '2021-05-30', '13:03:43', '2014年7月N1.mp3'], ['4', '25.44MB', '2021-05-30', '13:03:42', '2015年12月N1.mp3'], ['5', '26.52MB', '2021-05-30', '13:03:42', '2015年7月N1.mp3'], ['6', '26.21MB', '2021-05-30', '13:03:42', '2016年12月N1.mp3'], ['7', '26.44MB', '2021-05-30', '13:03:42', '2016年7月N1.mp3'], ['8', '25.94MB', '2021-05-30', '13:03:42', '2017年12月N1.mp3'], ['9', '23.53MB', '2021-05-30', '13:03:43', '2017年7月N1.mp3'], ['10', '24.63MB', '2021-05-30', '13:03:42', '2018年12月N1音频.mp3'], ['11', '23.60MB', '2021-05-30', '13:03:42', '2018年7月N1.mp3'], ['12', '275.14KB', '2021-05-30', '13:03:42', '【树先生日语N1】备考答疑群和公众号.jpg']]
+2021-06-21 13:42:44,724 - backend.py[line:182] - DEBUG: end Thread

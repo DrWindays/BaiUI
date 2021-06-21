@@ -88,7 +88,6 @@ class Processer(QObject):
 
     def downloadFiles_thread(self, parm):
         result = self.subprocess_execute_realtime(PROGRAM_RUN + "d " + parm[0])
-        log.debug(result)
 
     def deleteFiles_thread(self,filename):
         pass

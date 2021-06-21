@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-https://github.com/PeterDing/BaiduPCS-Py
+https://github.com/qjfoidnh/BaiduPCS-Go
 ----------------------------------------------------
 Changes:
 
@@ -11,6 +11,9 @@ draft version.
 
 #2021-06-18
 #sudo mount -t vfat -o uid=1000,iocharset=utf8 /dev/sda /mnt/usb
+
+#2021-06-21
+使用BaiduPCS-Go v3.81
 
 ----------------------------------------------------
 '''

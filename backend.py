@@ -7,6 +7,17 @@ import time
 from LogRecord import *
 from PyQt5.Qt import QObject
 import tempfile
+import platform
+
+PROGRAM_RUN = ""
+if(platform.system()=='Windows'):
+    log.debug('Welcome Windows!')
+    PROGRAM_RUN = "BaiduPCS-Go.exe "
+elif(platform.system()=='Linux'):
+    log.debug('Hello Linux')
+    PROGRAM_RUN = "./BaiduPCS-Go "
+else:
+    log.debug('not guarrented system')
 
 def _async_raise(tid, exctype):
     """raises the exception, performs cleanup if needed"""
@@ -59,7 +70,7 @@ class Processer(QObject):
 
     def getAllFiles_thread(self, parm):
         #type name
-        lists = self.subprocess_execute("./BaiduPCS-Go ls")
+        lists = self.subprocess_execute(PROGRAM_RUN + "ls")
         result = []
         for l in lists[ 4 : len(lists)-2 ]:
             l = ' '.join(l.split()) #多个空格合并成一个空格
@@ -68,15 +79,15 @@ class Processer(QObject):
         return result
 
     def getCurrentDir_thread(self, parm):
-        result = self.subprocess_execute("./BaiduPCS-Go pwd")
+        result = self.subprocess_execute(PROGRAM_RUN + "pwd")
         return result[0][:-1]
 
     def changeDir_thread(self, parm):
-        result = self.subprocess_execute("./BaiduPCS-Go cd " + parm[0])
+        result = self.subprocess_execute(PROGRAM_RUN + "cd " + parm[0])
         return
 
     def downloadFiles_thread(self, parm):
-        result = self.subprocess_execute_realtime("./BaiduPCS-Go d " + parm[0])
+        result = self.subprocess_execute_realtime(PROGRAM_RUN + "d " + parm[0])
         log.debug(result)
 
     def deleteFiles_thread(self,filename):
@@ -89,8 +100,9 @@ class Processer(QObject):
         subp = subprocess.Popen(cmd, shell=True, stdout=fileno, stderr=fileno)
         subp.wait()
         out_temp.seek(0)
+        log.debug(cmd)
         for line in out_temp.readlines():
-            log.debug("subprocess_execute " + str(line))
+            log.debug("subprocess_execute " + str(line, encoding = "utf-8"))
             result_text.append(str(line, encoding = "utf-8"))
         return result_text
 
@@ -162,7 +174,7 @@ class Processer(QObject):
         th.start()
 
     def startThread(self, func, parm):
-        log.debug("start Thread")
+        log.debug("start Thread: " + func.__name__[:-7])
         self.func = func
         result = func(parm)
         if self.callback != None:

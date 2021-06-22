@@ -87,7 +87,8 @@ class Processer(QObject):
         return
 
     def downloadFiles_thread(self, parm):
-        result = self.subprocess_execute_realtime(PROGRAM_RUN + "d " + parm[0])
+        result = self.subprocess_execute_realtime(PROGRAM_RUN + "d -p 1 " + parm[0])
+        return result
 
     def deleteFiles_thread(self,filename):
         pass
@@ -125,13 +126,15 @@ class Processer(QObject):
         subp.wait()
 
         self.execute_rt_inoutflag[execute_rt_id] = 0
+        return ['execute_id:'+str(execute_rt_id), 'Complete']
 
     def subprocess_inout(self,execute_id):
         while True:
             time.sleep(3)
             if self.execute_rt_inoutflag[execute_id] == 1:
                 result_text = []
-                result_text.append('down_id:' + str(execute_id))
+                result_text.append('execute_id:' + str(execute_id))
+                result_text.append('')
                 tmp_file = self.execute_rt_out_file[execute_id]
                 tmp_file.seek(0)
                 for line in tmp_file.readlines():

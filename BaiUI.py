@@ -22,7 +22,7 @@ from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QC
 from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget
 from PyQt5.QtGui import QTextCursor, QIcon,QPainter
 from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView,QProgressBar
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView,QProgressBar,QHeaderView
 from PyQt5.QtCore import QRect,QPoint
 import sys,os,subprocess
 import backend
@@ -67,31 +67,76 @@ class BaiTabBar(QTabBar):
             painter.drawControl(QStyle.CE_TabBarTabLabel,opt)
             painter.restore()
 
-class DownloadFileItem(QWidget):
-    def __init__(self, downid, name):
-        super().__init__()
+class DownloadFileList(QTableWidget):
+    def __init__(self, filelst = []):
+        super().__init__(len(filelst), 5)
 
-        #self.mainwidget = QWidget()
-        self.hbox = QHBoxLayout()
-        self.setLayout(self.hbox)
+        self.filelist = []
 
-        self.downid = downid
-        #self.checkbox = QCheckBox()
-        #self.idlbl = QLabel(id)
-        self.namelbl = QLabel(name)
-        self.progresslbl = QLabel()
-        self.progressbar = QProgressBar(self)
-        self.progressbar.step = 0
-        self.statuslbl = QLabel('正在下载')
+        for f in filelst:
+            addDownloadFile(filelst[0], filelst[1])
+        self.horizontalHeader().setVisible(False)
+        self.verticalHeader().setVisible(False)
 
-        self.hbox.addWidget(self.namelbl)
-        self.hbox.addWidget(self.progresslbl)
-        self.hbox.addWidget(self.statuslbl)
-    def getDownID(self):
-        return self.downid
-    def updateProgress(self,progress_str):
-        self.progresslbl.setText(progress_str)
+    def addDownloadFile(self, execute_id, name):
+        row = len(self.filelist)+1
+        log.debug(row)
+        #self.clear()
+        self.setRowCount(row)
+        item0 = QTableWidgetItem(name[ name.rfind("/") + 1 : ])
+        item1 = QTableWidgetItem('0MB/0MB')
+        item2 = QTableWidgetItem('0B/s')
+        item3 = QTableWidgetItem('正在下载')
+        progress_bar = QProgressBar()
 
+        self.filelist.append([execute_id, name,
+                              item0, item1, item2, item3, progress_bar])
+
+        self.setItem(row - 1, 0, item0)
+        self.setItem(row - 1, 1, item1)
+        self.setItem(row - 1, 2, item2)
+        self.setCellWidget(row - 1, 3, progress_bar)
+
+        self.setRowHeight(row - 1, 40)
+        self.setColumnWidth(0, 200)
+        self.setColumnWidth(1, 200)
+        self.setColumnWidth(2, 100)
+        self.setColumnWidth(3, 20)
+
+
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.horizontalHeader().setVisible(False)
+        self.verticalHeader().setVisible(False)
+        #self.resizeRowsToContents()
+        #self.resizeColumnsToContents()
+        self.setShowGrid(False);
+        self.setStyleSheet(
+        "QTableWidget{border:0px solid rgb(0,0,0);}"
+        "QTableWidget::Item{border:0px solid rgb(0,0,0);"
+        "border-bottom:1px solid rgb(0,0,0);}")
+
+    def getExecuteId(self):
+        return self.execute_id
+
+    def updateProgress(self, execute_id, progress_str):
+        item = self.getItemByExecuteID(execute_id)
+        if item != None:
+            progress_str[ progress_str.find("↓") + 1 : progress_str.find("/")]
+            item[3].setText(progress_str[ progress_str.find("↓") + 1 : progress_str.find("MB ") + 2])
+            item[4].setText(progress_str[progress_str.find("MB ") + 3 : progress_str.find(" in")])
+
+
+    def updateStatus(self, execute_id, str):
+        item = self.getItemByExecuteID(execute_id)
+        if item != None:
+            item[5].setText(str)
+
+    def getItemByExecuteID(self, execute_id):
+        for f in self.filelist:
+            if f[0] == execute_id:
+                return f
+        return None
 
 
 class FileList(QTableWidget):
@@ -150,7 +195,7 @@ class FileList(QTableWidget):
         i = 0
         for c in self.checkbox:
             if c.isChecked() == True:
-                id, size, date, time, name = self.filelst[i]
+                id, size, date, time, name = self.filelst[i+1]
                 result.append(name)
             i+=1
         return result
@@ -186,6 +231,7 @@ class BaiUI(QWidget):
         self.mypan_tab = QWidget()
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
+        self.downloadFileList = DownloadFileList()
 
         self.now_down_vbox.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
@@ -212,8 +258,6 @@ class BaiUI(QWidget):
         self.downloadFilesSignal.connect(self.downloadFiles)
 
         self.initUI()
-    def __del__(self):
-        del self.xer
 
     def initUI(self):
         god_vbox_main = QVBoxLayout()
@@ -256,23 +300,32 @@ class BaiUI(QWidget):
         self.mypan_vbox.addWidget(self.filelist)
 
         #create now download tab
+        self.now_down_vbox.addWidget(self.downloadFileList)
+
         self.show()
 
-    def addDownloadItem(self, downid, name):
-        downitem = DownloadFileItem(downid,name)
+    # download function #
+    def addDownloadItem(self, execute_id, name):
+        downitem = DownloadFileItem(execute_id,name)
         self.now_download_list.append(downitem)
         self.now_down_vbox.addWidget(downitem)
 
-    def isDownloadItemExist(self, downid):
+    def isDownloadItemExist(self, execute_id):
         for item in self.now_download_list:
-            if item.getDownID() == downid:
+            if item.getExecuteId() == execute_id:
                 return True
         return False
 
-    def updateProgress(self, downid, progress_str):
+    def updateProgress(self, execute_id, progress_str):
         for item in self.now_download_list:
-            if item.getDownID() == downid:
+            if item.getExecuteId() == execute_id:
                 item.updateProgress(progress_str)
+                break
+
+    def updateStatus(self, execute_id, progress_str):
+        for item in self.now_download_list:
+            if item.getExecuteId() == execute_id:
+                item.updateStatus(progress_str)
                 break
 
     def updateFileList(self, list):
@@ -285,23 +338,28 @@ class BaiUI(QWidget):
         self.xer.getAllFiles()
 
     def downloadFiles(self, result):
-        downid = result[0][8:]
-        log.debug("down_id: " + downid)
+        execute_id = result[0][11:]
+        log.debug("execute_id: " + execute_id)
         for r in result[1:]:
-            if "文件名称" in r:
+            if "文件路径" in r:
                 #if self.now_download_list[downid] == None:
                 #    self.now_download_list.append([r])
                 #else:
                 #    self.now_download_list[downid] = [r]
-                if self.isDownloadItemExist(downid) == False:
-                    self.addDownloadItem(downid, r[ r.find("文件名称") + 4: ])
+                if self.downloadFileList.getItemByExecuteID(execute_id) == None:
+                    self.downloadFileList.addDownloadFile(execute_id, r[ r.find("/"): ])
             if "[1] ↓" in r:
                 #if self.now_download_list[downid] == None:
                 #    if self.now_download_list[downid][1] == None:
                 #    self.now_download_list[downid][1].append()
                 #self.now_down_progress_lbl.setText(r [r.rfind("[1] ↓"):] )
-                self.updateProgress(downid, r [r.rfind("[1] ↓"):] )
-
+                #self.updateProgress(execute_id, r [r.rfind("[1] ↓"):] )
+                self.downloadFileList.updateProgress(execute_id, r [r.rfind("[1] ↓"):] )
+            if "[1] 下载文件失败" in r:
+                #self.updateStatus(execute_id, r)
+                self.downloadFileList.updateStatus(execute_id, r)
+            #if "Complete" in r:
+            #    self.updateStatus(r)
 
     def processCallback(self, func, result):
         log.debug("call processCallback")
@@ -320,7 +378,10 @@ class BaiUI(QWidget):
     #SLOT EVENT#
     def DownloadClicked(self):
         log.debug(self.filelist.getCheckedFiles())
-        self.xer.downloadFiles(self.filelist.getCheckedFiles())
+        for f in self.filelist.getCheckedFiles():
+            if "../" in f:
+                continue
+            self.xer.downloadFiles(f)
 
     def SelectAllClicked(self):
         if self.selectFlag == True:

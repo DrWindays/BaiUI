@@ -45,6 +45,7 @@ class Processer(QObject):
         self.outbuf = []
         self.callback = callback
         self.threadlist = []
+        self.subprocesslist = []
         self.func = 0
         self.execute_rt_func = 0
         self.execute_rt_out_file = []
@@ -64,6 +65,13 @@ class Processer(QObject):
                 log.debug("stop thread ")
             except:
                 log.error("not exist thread")
+
+        for sub in self.subprocesslist:
+            try:
+                sub.terminate()
+                log.debug("stop subprocess")
+            except:
+                log.error("not exist subprocess")
 
     def registerCallback(self,callback):
         self.callback = callback
@@ -98,6 +106,7 @@ class Processer(QObject):
         out_temp = tempfile.TemporaryFile()
         fileno = out_temp.fileno()
         subp = subprocess.Popen(cmd, shell=True, stdout=fileno, stderr=fileno)
+        self.subprocesslist.append(subp)
         subp.wait()
         out_temp.seek(0)
         log.debug(cmd)
@@ -118,11 +127,12 @@ class Processer(QObject):
         fileno = self.execute_rt_out_file[execute_rt_id].fileno()
         log.debug("subprocess_execute_realtime " + cmd)
 
-        self.processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,execute_rt_id,))
-        self.threadlist.append(self.processthread)
-        self.processthread.start()
+        processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,execute_rt_id,))
+        self.threadlist.append(processthread)
+        processthread.start()
 
         subp = subprocess.Popen(cmd, shell=True, stdout=fileno, stderr=fileno)
+        self.subprocesslist.append(subp)
         subp.wait()
 
         self.execute_rt_inoutflag[execute_rt_id] = 0

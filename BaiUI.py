@@ -83,32 +83,39 @@ class DownloadFileList(QTableWidget):
         log.debug(row)
         #self.clear()
         self.setRowCount(row)
-        item0 = QTableWidgetItem(name[ name.rfind("/") + 1 : ])
+        item0 = QTableWidgetItem(name[ name.rfind("/") + 1 : len(name) - 1])
         item1 = QTableWidgetItem('0MB/0MB')
-        item2 = QTableWidgetItem('0B/s')
-        item3 = QTableWidgetItem('正在下载')
+        statuslbl = QLabel('0B/s - 剩余时间: --:--:--')
         progress_bar = QProgressBar()
 
         self.filelist.append([execute_id, name,
-                              item0, item1, item2, item3, progress_bar])
+                              item0, item1, statuslbl, progress_bar])
 
         self.setItem(row - 1, 0, item0)
         self.setItem(row - 1, 1, item1)
-        self.setItem(row - 1, 2, item2)
-        self.setCellWidget(row - 1, 3, progress_bar)
 
-        self.setRowHeight(row - 1, 40)
+        progress_widget = QWidget()
+        progress_vbox = QVBoxLayout()
+        
+        progress_widget.setLayout(progress_vbox)
+        progress_vbox.addWidget(progress_bar)
+        progress_vbox.addWidget(statuslbl)
+
+        #self.setItem(row - 1, 2, item2)
+        self.setCellWidget(row - 1, 2, progress_widget)
+
+        self.setRowHeight(row - 1, 60)
         self.setColumnWidth(0, 200)
-        self.setColumnWidth(1, 200)
-        self.setColumnWidth(2, 100)
-        self.setColumnWidth(3, 20)
+        self.setColumnWidth(1, 150)
+        self.setColumnWidth(2, 250)
+        #self.setColumnWidth(3, 20)
 
 
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setVisible(False)
         self.verticalHeader().setVisible(False)
-        #self.resizeRowsToContents()
+        self.resizeRowsToContents()
         #self.resizeColumnsToContents()
         self.setShowGrid(False);
         self.setStyleSheet(
@@ -119,18 +126,47 @@ class DownloadFileList(QTableWidget):
     def getExecuteId(self):
         return self.execute_id
 
+    def splitProgressStr(self, progress_str):
+        offset = 0
+        if progress_str[ progress_str.find("B ") - 1] >= '0' and progress_str[ progress_str.find("B ") - 1] <='9' :
+            offset = 1
+        else:
+            offset = 2
+
+        offset_complete = 0
+        if progress_str[ progress_str.find("B") - 1] >= '0' and progress_str[ progress_str.find("B") - 1] <='9' :
+            offset_complete = 1
+        else:
+            offset_complete = 2
+
+        allsize = progress_str[ progress_str.find("B/") + 2 : progress_str.find("B ") - offset]
+
+        unit = progress_str[ progress_str.find("B ") - offset + 1: progress_str.find("B ") + 1]
+        
+        complete = progress_str[ progress_str.find("↓") + 1 : progress_str.find("B") - offset_complete]
+        
+        speed = progress_str[progress_str.find("MB ") + 3 : progress_str.find(" in")]
+        elapse = progress_str[progress_str.find(" in") + 3 : progress_str.find("s,") + 1]
+        left = progress_str[progress_str.find('left ') + 5 : progress_str.find(' .....')]
+        if left == '-':
+            left = '--:--:--'
+        return allsize,unit,complete,speed,left
+
     def updateProgress(self, execute_id, progress_str):
         item = self.getItemByExecuteID(execute_id)
         if item != None:
-            progress_str[ progress_str.find("↓") + 1 : progress_str.find("/")]
-            item[3].setText(progress_str[ progress_str.find("↓") + 1 : progress_str.find("MB ") + 2])
-            item[4].setText(progress_str[progress_str.find("MB ") + 3 : progress_str.find(" in")])
 
+            allsize,unit,complete,speed,left = self.splitProgressStr(progress_str)
+            log.debug(complete + ' ' + allsize)
+            item[3].setText(complete + unit + '/'+ allsize + unit)
+            item[4].setText(speed + ' - ' + '剩余时间: ' + left)
+            item[5].setValue( int( float(complete)/float(allsize) * 100))
 
     def updateStatus(self, execute_id, str):
         item = self.getItemByExecuteID(execute_id)
         if item != None:
-            item[5].setText(str)
+            item[4].setText(str)
+            #item[5].setValue( int( float(complete)/float(allsize) * 100))
 
     def getItemByExecuteID(self, execute_id):
         for f in self.filelist:
@@ -287,7 +323,7 @@ class BaiUI(QWidget):
         center_vbox_container.addWidget(self.tabWidget)
 
         self.setGeometry(300, 300, 300, 220)
-        self.setFixedSize(800,600)
+        self.setFixedSize(900,700)
 
         self.currentDirLbl.setStyleSheet(
             "QLabel{border:0px solid rgb(0,0,0);"
@@ -305,29 +341,6 @@ class BaiUI(QWidget):
         self.show()
 
     # download function #
-    def addDownloadItem(self, execute_id, name):
-        downitem = DownloadFileItem(execute_id,name)
-        self.now_download_list.append(downitem)
-        self.now_down_vbox.addWidget(downitem)
-
-    def isDownloadItemExist(self, execute_id):
-        for item in self.now_download_list:
-            if item.getExecuteId() == execute_id:
-                return True
-        return False
-
-    def updateProgress(self, execute_id, progress_str):
-        for item in self.now_download_list:
-            if item.getExecuteId() == execute_id:
-                item.updateProgress(progress_str)
-                break
-
-    def updateStatus(self, execute_id, progress_str):
-        for item in self.now_download_list:
-            if item.getExecuteId() == execute_id:
-                item.updateStatus(progress_str)
-                break
-
     def updateFileList(self, list):
         self.filelist.updateFileList(list)
     def updateDir(self, str):

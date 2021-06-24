@@ -90,6 +90,10 @@ class Processer(QObject):
         result = self.subprocess_execute(PROGRAM_RUN + "pwd")
         return result[0][:-1]
 
+    def getCurrentUid_thread(self,parm):
+        result = self.subprocess_execute(PROGRAM_RUN + "who")
+        return result[0][ result[0].find("uid: ") + 5 : result[0].find(", 用")]
+
     def changeDir_thread(self, parm):
         result = self.subprocess_execute(PROGRAM_RUN + "cd " + parm[0])
         return
@@ -159,6 +163,14 @@ class Processer(QObject):
 
 
     #THREAD ENTRY#
+    def startThread(self, func, parm):
+        log.debug("start Thread: " + func.__name__[:-7])
+        self.func = func
+        result = func(parm)
+        if self.callback != None:
+            self.callback(func.__name__[:-7], result)
+        log.debug("end Thread")
+
     def getAllFiles(self):
         parm = []
         th = threading.Thread(target=self.startThread,args=(self.getAllFiles_thread,parm))
@@ -185,10 +197,8 @@ class Processer(QObject):
         self.threadlist.append(th)
         th.start()
 
-    def startThread(self, func, parm):
-        log.debug("start Thread: " + func.__name__[:-7])
-        self.func = func
-        result = func(parm)
-        if self.callback != None:
-            self.callback(func.__name__[:-7], result)
-        log.debug("end Thread")
+    def getCurrentUid(self):
+        parm = []
+        th = threading.Thread(target=self.startThread,args=(self.getCurrentUid_thread,parm))
+        self.threadlist.append(th)
+        th.start()

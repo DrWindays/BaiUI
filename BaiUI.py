@@ -249,6 +249,7 @@ class BaiUI(QWidget):
     updateDirSignal = QtCore.pyqtSignal(str)
     changeDirSingal = QtCore.pyqtSignal()
     downloadFilesSignal = QtCore.pyqtSignal(list)
+    getCurrentUidSignal = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -268,6 +269,7 @@ class BaiUI(QWidget):
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
         self.downloadFileList = DownloadFileList()
+        self.top_hbox_nav = QHBoxLayout()
 
         self.now_down_vbox.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
@@ -278,10 +280,7 @@ class BaiUI(QWidget):
         #self.xer.registerCallback()
 
         self.filelist = FileList([],self)
-
-        self.xer.getAllFiles()
-        self.xer.getCurrentDir()
-        #self.updateFileList()
+        self.xer.getCurrentUid()
 
         #connect all slot
         self.downloadBtn.clicked.connect(self.DownloadClicked)
@@ -292,12 +291,12 @@ class BaiUI(QWidget):
         self.updateDirSignal.connect(self.updateDir)
         self.changeDirSingal.connect(self.changeDir)
         self.downloadFilesSignal.connect(self.downloadFiles)
+        self.getCurrentUidSignal.connect(self.getCurrentUid)
 
         self.initUI()
 
     def initUI(self):
         god_vbox_main = QVBoxLayout()
-        top_hbox_nav = QHBoxLayout()
         center_vbox_container = QVBoxLayout()
         blank_l = QLabel("    ")
 
@@ -312,7 +311,7 @@ class BaiUI(QWidget):
         self.mypan_tab.setLayout(self.mypan_vbox)
         self.now_down_tab.setLayout(self.now_down_vbox)
 
-        god_vbox_main.addLayout(top_hbox_nav)
+        god_vbox_main.addLayout(self.top_hbox_nav)
         
         #create the navigation button at the most top of the app.
         #top_hbox_nav.addWidget(self.downloadBtn)
@@ -353,10 +352,32 @@ class BaiUI(QWidget):
         self.filelist.updateFileList(list)
     def updateDir(self, str):
         self.currentDirLbl.setText("当前目录： " + str)
+    def getCurrentUid(self,uid):
+        log.debug("uid: " + uid)
+        if uid == '0':
+            log.debug("not login")
+            self.username = QLabel('用户名')
+            self.username_input = QLineEdit()
+            self.password = QLabel('密码')
+            self.password_input = QLineEdit()
+            self.loginbtn = QPushButton('登录')
+            self.loginbtn.clicked.connect(self.LoginBtnClicked)
+            
+            self.top_hbox_nav.addWidget(self.username)
+            self.top_hbox_nav.addWidget(self.username_input)
+            self.top_hbox_nav.addWidget(self.password)
+            self.top_hbox_nav.addWidget(self.password_input)
+            self.top_hbox_nav.addWidget(self.loginbtn)
+
+        else:
+            self.xer.getAllFiles()
+            self.xer.getCurrentDir()
+            #self.updateFileList()
 
     def changeDir(self):
         self.xer.getCurrentDir()
         self.xer.getAllFiles()
+
 
     def downloadFiles(self, result):
         execute_id = result[0][11:]
@@ -395,6 +416,8 @@ class BaiUI(QWidget):
             self.changeDirSingal.emit()
         if func == "downloadFiles" :
             self.downloadFilesSignal.emit(result)
+        if func == "getCurrentUid" :
+            self.getCurrentUidSignal.emit(result)
 
     #SLOT EVENT#
     def DownloadClicked(self):
@@ -430,6 +453,10 @@ class BaiUI(QWidget):
         else :
             log.debug("start download " + line[4])
             self.xer.downloadFiles(line[4])
+
+    def LoginBtnClicked(self):
+        
+
     def closeEvent(self,event):
         log.debug("closeEvent")
         self.xer.closeAllThread()

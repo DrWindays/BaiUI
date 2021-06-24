@@ -1,0 +1,21 @@
+2021-06-24 16:18:13,406 - backend.py[line:14] - DEBUG: Welcome Windows!
+2021-06-24 16:18:13,407 - BaiUI.py[line:438] - DEBUG: Program Start
+2021-06-24 16:18:13,851 - BaiUI.py[line:190] - DEBUG: []
+2021-06-24 16:18:13,856 - backend.py[line:189] - DEBUG: start Thread: getAllFiles
+2021-06-24 16:18:13,856 - backend.py[line:189] - DEBUG: start Thread: getCurrentDir
+2021-06-24 16:18:14,092 - backend.py[line:112] - DEBUG: BaiduPCS-Go.exe ls
+2021-06-24 16:18:14,092 - backend.py[line:114] - DEBUG: subprocess_execute 通配符匹配文件路径, 遇到错误, not absolute path
+
+2021-06-24 16:18:14,093 - BaiUI.py[line:386] - DEBUG: call processCallback
+2021-06-24 16:18:14,094 - BaiUI.py[line:387] - DEBUG: getAllFiles
+2021-06-24 16:18:14,164 - backend.py[line:112] - DEBUG: BaiduPCS-Go.exe pwd
+2021-06-24 16:18:14,165 - backend.py[line:114] - DEBUG: subprocess_execute 
+
+2021-06-24 16:18:14,165 - BaiUI.py[line:386] - DEBUG: call processCallback
+2021-06-24 16:18:14,165 - BaiUI.py[line:387] - DEBUG: getCurrentDir
+2021-06-24 16:18:23,978 - BaiUI.py[line:434] - DEBUG: closeEvent
+2021-06-24 16:18:23,978 - backend.py[line:61] - DEBUG: closeAllThread
+2021-06-24 16:18:23,992 - backend.py[line:67] - ERROR: not exist thread
+2021-06-24 16:18:23,992 - backend.py[line:67] - ERROR: not exist thread
+2021-06-24 16:18:23,992 - backend.py[line:72] - DEBUG: stop subprocess
+2021-06-24 16:18:23,993 - backend.py[line:72] - DEBUG: stop subprocess

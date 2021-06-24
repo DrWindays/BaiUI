@@ -315,8 +315,8 @@ class BaiUI(QWidget):
         god_vbox_main.addLayout(top_hbox_nav)
         
         #create the navigation button at the most top of the app.
-        top_hbox_nav.addWidget(self.downloadBtn)
-        top_hbox_nav.addWidget(self.selectAllBtn)
+        #top_hbox_nav.addWidget(self.downloadBtn)
+        #top_hbox_nav.addWidget(self.selectAllBtn)
         #top_hbox_nav.addWidget(self.currentDirLbl)
 
         god_vbox_main.addLayout(center_vbox_container)
@@ -331,7 +331,15 @@ class BaiUI(QWidget):
             "color:purple}")
         self.currentDirLbl.setContentsMargins(0,3,0,0)
 
-        #create the mypan tab 
+        #create the mypan tab
+        down_nav_widget = QWidget()
+        down_nav_hbox = QHBoxLayout()
+        down_nav_hbox.addWidget(self.downloadBtn)
+        down_nav_hbox.addWidget(self.selectAllBtn)
+
+        down_nav_widget.setLayout(down_nav_hbox)
+        
+        self.mypan_vbox.addWidget(down_nav_widget)
         self.mypan_vbox.addWidget(self.currentDirLbl)
         self.mypan_vbox.addWidget(self.filelist)
 

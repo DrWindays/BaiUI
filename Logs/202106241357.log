@@ -1,0 +1,15 @@
+2021-06-24 13:57:04,567 - backend.py[line:14] - DEBUG: Welcome Windows!
+2021-06-24 13:57:04,580 - BaiUI.py[line:430] - DEBUG: Program Start
+2021-06-24 13:57:11,951 - BaiUI.py[line:190] - DEBUG: []
+2021-06-24 13:57:12,081 - backend.py[line:189] - DEBUG: start Thread: getAllFiles
+2021-06-24 13:57:12,082 - backend.py[line:189] - DEBUG: start Thread: getCurrentDir
+2021-06-24 13:57:14,636 - backend.py[line:112] - DEBUG: BaiduPCS-Go.exe pwd
+2021-06-24 13:57:14,636 - backend.py[line:114] - DEBUG: subprocess_execute 
+
+2021-06-24 13:57:14,636 - backend.py[line:112] - DEBUG: BaiduPCS-Go.exe ls
+2021-06-24 13:57:14,637 - BaiUI.py[line:378] - DEBUG: call processCallback
+2021-06-24 13:57:14,654 - backend.py[line:114] - DEBUG: subprocess_execute 通配符匹配文件路径, 遇到错误, not absolute path
+
+2021-06-24 13:57:14,665 - BaiUI.py[line:379] - DEBUG: getCurrentDir
+2021-06-24 13:57:14,669 - BaiUI.py[line:378] - DEBUG: call processCallback
+2021-06-24 13:57:14,669 - BaiUI.py[line:379] - DEBUG: getAllFiles

@@ -78,9 +78,10 @@ class DownloadFileList(QTableWidget):
         self.horizontalHeader().setVisible(False)
         self.verticalHeader().setVisible(False)
 
+
     def addDownloadFile(self, execute_id, name):
         row = len(self.filelist)+1
-        log.debug(row)
+        log.info(row)
         #self.clear()
         self.setRowCount(row)
         item0 = QTableWidgetItem(name[ name.rfind("/") + 1 : len(name) - 1])
@@ -139,26 +140,28 @@ class DownloadFileList(QTableWidget):
         else:
             offset_complete = 2
 
-        allsize = progress_str[ progress_str.find("B/") + 2 : progress_str.find("B ") - offset]
+        allsize = progress_str[ progress_str.find("B/") + 2 : progress_str.find("B ") - offset + 1]
 
-        unit = progress_str[ progress_str.find("B ") - offset + 1: progress_str.find("B ") + 1]
+        unit_allsize = progress_str[ progress_str.find("B ") - offset + 1: progress_str.find("B ") + 1]
         
-        complete = progress_str[ progress_str.find("↓") + 1 : progress_str.find("B") - offset_complete]
-        
+        complete = progress_str[ progress_str.find("↓") + 1 : progress_str.find("B") - offset_complete + 1]
+
+        unit_complete = progress_str[ progress_str.find("B/") - offset_complete + 1: progress_str.find("B/") + 1]
+
         speed = progress_str[progress_str.find("MB ") + 3 : progress_str.find(" in")]
         elapse = progress_str[progress_str.find(" in") + 3 : progress_str.find("s,") + 1]
         left = progress_str[progress_str.find('left ') + 5 : progress_str.find(' .....')]
         if left == '-':
             left = '--:--:--'
-        return allsize,unit,complete,speed,left
+        return allsize,unit_allsize,complete,unit_complete,speed,left
 
     def updateProgress(self, execute_id, progress_str):
         item = self.getItemByExecuteID(execute_id)
         if item != None:
 
-            allsize,unit,complete,speed,left = self.splitProgressStr(progress_str)
+            allsize,unit_allsize,complete,unit_complete,speed,left = self.splitProgressStr(progress_str)
             log.debug(complete + ' ' + allsize)
-            item[3].setText(complete + unit + '/'+ allsize + unit)
+            item[3].setText(complete + unit_complete + '/'+ allsize + unit_allsize)
             item[4].setText(speed + ' - ' + '剩余时间: ' + left)
             item[5].setValue( int( float(complete)/float(allsize) * 100))
 
@@ -187,7 +190,7 @@ class FileList(QTableWidget):
     def updateFileList(self,filelst):
         self.filelst = [["0","0","0","0","../"]] + filelst
         self.checkbox = []
-        log.debug(filelst)
+        log.info(filelst)
 
         self.clear()
         self.setRowCount(len(self.filelst))
@@ -353,9 +356,9 @@ class BaiUI(QWidget):
     def updateDir(self, str):
         self.currentDirLbl.setText("当前目录： " + str)
     def getCurrentUid(self,uid):
-        log.debug("uid: " + uid)
+        log.info("uid: " + uid)
         if uid == '0':
-            log.debug("not login")
+            log.info("not login")
             self.username = QLabel('用户名')
             self.username_input = QLineEdit()
             self.password = QLabel('密码')
@@ -378,18 +381,20 @@ class BaiUI(QWidget):
         self.xer.getCurrentDir()
         self.xer.getAllFiles()
 
+    def getFileSize(self,filePath):
+     
+        fsize = os.path.getsize(filePath)
+        fsize = fsize/float(1024 * 1024)
+     
+        return round(fsize, 2)
 
     def downloadFiles(self, result):
         execute_id = result[0][11:]
         log.debug("execute_id: " + execute_id)
         for r in result[1:]:
             if "文件路径" in r:
-                #if self.now_download_list[downid] == None:
-                #    self.now_download_list.append([r])
-                #else:
-                #    self.now_download_list[downid] = [r]
-                if self.downloadFileList.getItemByExecuteID(execute_id) == None:
-                    self.downloadFileList.addDownloadFile(execute_id, r[ r.find("/"): ])
+                #if self.downloadFileList.getItemByExecuteID(execute_id) == None:
+                self.downloadFileList.addDownloadFile(execute_id, r[ r.find("/"): ])
             if "[1] ↓" in r:
                 #if self.now_download_list[downid] == None:
                 #    if self.now_download_list[downid][1] == None:
@@ -399,14 +404,20 @@ class BaiUI(QWidget):
                 self.downloadFileList.updateProgress(execute_id, r [r.rfind("[1] ↓"):] )
             if "[1] 下载文件失败" in r:
                 #self.updateStatus(execute_id, r)
-                self.downloadFileList.updateStatus(execute_id, r)
+                self.downloadFileList.updateStatus(execute_id, r[r.rfind("[1] 下载文件失败"):-1])
+
+            if "[1] 文件已经存在" in r:
+                filesize = self.getFileSize( r[ r.find("[1] 文件已经存在") + 12: r.find(',') ] )
+                self.downloadFileList.updateProgress(execute_id,
+                     "[1] ↓" + str(filesize)+"MB/" + str(filesize)+"MB 0B/s in 0s, left - ........")
+                self.downloadFileList.updateStatus(execute_id, "文件已经存在")
             #if "Complete" in r:
             #    self.updateStatus(r)
 
     def processCallback(self, func, result):
         log.debug("call processCallback")
         log.debug(func)
-        log.debug(result[len(result)-1])
+        #log.debug(result[len(result)-1])
 
         if func == "getAllFiles" :
             self.updateFileListSignal.emit(result)
@@ -421,7 +432,7 @@ class BaiUI(QWidget):
 
     #SLOT EVENT#
     def DownloadClicked(self):
-        log.debug(self.filelist.getCheckedFiles())
+        log.info(self.filelist.getCheckedFiles())
         for f in self.filelist.getCheckedFiles():
             if "../" in f:
                 continue
@@ -437,32 +448,32 @@ class BaiUI(QWidget):
         self.filelist.selectAllFiles(self.selectFlag)
 
     def FileListDoubleClicked(self, line):
-        log.debug(line)
+        log.info(line)
         dir = ""
         if "../" in line[4]:
-            log.debug("return back to up path "+line[4])
+            log.info("return back to up path "+line[4])
             dir = self.currentDirLbl.text()
             dir = dir[ dir.find("： ") + 2 : dir.rfind("/") + 1]
         elif "/" in line[4]:
-            log.debug("current dir: "+line[4])
+            log.info("current dir: "+line[4])
             dir = line[4]
 
-        log.debug(dir)
+        log.info(dir)
         if dir != "":
             self.xer.changeDir(dir)
         else :
-            log.debug("start download " + line[4])
+            log.info("start download " + line[4])
             self.xer.downloadFiles(line[4])
 
     def LoginBtnClicked(self):
-        
+        pass
 
     def closeEvent(self,event):
-        log.debug("closeEvent")
+        log.info("closeEvent")
         self.xer.closeAllThread()
 
 if __name__ == "__main__":
-    log.debug("Program Start")
+    log.info("Program Start")
     BaiAPP = QtWidgets.QApplication(sys.argv)
     BaiUI = BaiUI()
 

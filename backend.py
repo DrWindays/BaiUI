@@ -11,13 +11,13 @@ import platform
 
 PROGRAM_RUN = ""
 if(platform.system()=='Windows'):
-    log.debug('Welcome Windows!')
+    log.info('Welcome Windows!')
     PROGRAM_RUN = "BaiduPCS-Go.exe "
 elif(platform.system()=='Linux'):
-    log.debug('Hello Linux')
+    log.info('Hello Linux')
     PROGRAM_RUN = "./BaiduPCS-Go "
 else:
-    log.debug('not guarrented system')
+    log.info('not guarrented system')
 
 def _async_raise(tid, exctype):
     """raises the exception, performs cleanup if needed"""
@@ -51,6 +51,7 @@ class Processer(QObject):
         self.execute_rt_out_file = []
         self.execute_rt_inoutflag = []
         self.execute_rt_id = 0
+        self.execute_rt_semaphore = threading.Semaphore(1)
         #self.subp = subprocess.Popen("BaiduPCS-Go.exe", shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         #self.processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,))
         #self.threadlist.append(self.processthread)
@@ -58,18 +59,18 @@ class Processer(QObject):
 
 
     def closeAllThread(self):
-        log.debug("closeAllThread")
+        log.info("closeAllThread")
         for th in self.threadlist:
             try:
                 stop_thread(th)
-                log.debug("stop thread ")
+                log.info("stop thread ")
             except:
                 log.error("not exist thread")
 
         for sub in self.subprocesslist:
             try:
                 sub.terminate()
-                log.debug("stop subprocess")
+                log.info("stop subprocess")
             except:
                 log.error("not exist subprocess")
 
@@ -113,23 +114,26 @@ class Processer(QObject):
         self.subprocesslist.append(subp)
         subp.wait()
         out_temp.seek(0)
-        log.debug(cmd)
+        log.info(cmd)
         for line in out_temp.readlines():
-            log.debug("subprocess_execute " + str(line, encoding = "utf-8"))
+            log.info("subprocess_execute " + str(line, encoding = "utf-8"))
             result_text.append(str(line, encoding = "utf-8"))
         return result_text
 
     def subprocess_execute_realtime(self, cmd):
         result_text = []
+        self.execute_rt_semaphore.acquire()
         execute_rt_id = self.execute_rt_id
 
         self.execute_rt_id+=1
 
         self.execute_rt_out_file.append(tempfile.TemporaryFile())
         self.execute_rt_inoutflag.append(1)
+        self.execute_rt_semaphore.release()
 
         fileno = self.execute_rt_out_file[execute_rt_id].fileno()
-        log.debug("subprocess_execute_realtime " + cmd)
+
+        log.info("subprocess_execute_realtime " + cmd)
 
         processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,execute_rt_id,))
         self.threadlist.append(processthread)
@@ -139,37 +143,48 @@ class Processer(QObject):
         self.subprocesslist.append(subp)
         subp.wait()
 
+        time.sleep(1)
         self.execute_rt_inoutflag[execute_rt_id] = 0
         return ['execute_id:'+str(execute_rt_id), 'Complete']
 
     def subprocess_inout(self,execute_id):
+        offset = 0
         while True:
-            time.sleep(3)
             if self.execute_rt_inoutflag[execute_id] == 1:
                 result_text = []
                 result_text.append('execute_id:' + str(execute_id))
                 result_text.append('')
                 tmp_file = self.execute_rt_out_file[execute_id]
-                tmp_file.seek(0)
+                tmp_file.seek(offset)
+                before_offset = offset
                 for line in tmp_file.readlines():
-                    #log.debug("subprocess_execute " + str(line))
-                    result_text.append(str(line, encoding = "utf-8"))
-                #log.debug("subprocess_execute " + str(result_text))
+                    log.debug("subprocess_execute " + str(line, encoding = "utf-8"))
+                    try:
+                        result_text.append(str(line, encoding = "utf-8"))
+                    except e:
+                        result_text.append('need retry, error : ' + e)
+                    offset += len(line)
+                #offset = len(tmp_file.readlines())
+                #log.info("subprocess_execute " + str(result_text))
+                if before_offset == offset:
+                    continue
                 if self.callback != None:
                     self.callback(self.func.__name__[:-7], result_text)
             else:
+                log.info("subprocess_inout exit")
                 break
+            #time.sleep(0.5)
 
 
 
     #THREAD ENTRY#
     def startThread(self, func, parm):
-        log.debug("start Thread: " + func.__name__[:-7])
+        log.info("start Thread: " + func.__name__[:-7])
         self.func = func
         result = func(parm)
         if self.callback != None:
             self.callback(func.__name__[:-7], result)
-        log.debug("end Thread")
+        log.info("end Thread")
 
     def getAllFiles(self):
         parm = []

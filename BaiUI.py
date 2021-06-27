@@ -3,6 +3,7 @@
 
 '''
 https://github.com/qjfoidnh/BaiduPCS-Go
+https://south-plus.org/index.php
 ----------------------------------------------------
 Changes:
 
@@ -20,7 +21,7 @@ draft version.
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QCheckBox,QTabBar
 from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget
-from PyQt5.QtGui import QTextCursor, QIcon,QPainter
+from PyQt5.QtGui import QTextCursor, QIcon,QPainter,QPixmap
 from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView,QProgressBar,QHeaderView
 from PyQt5.QtCore import QRect,QPoint
@@ -253,6 +254,7 @@ class BaiUI(QWidget):
     changeDirSingal = QtCore.pyqtSignal()
     downloadFilesSignal = QtCore.pyqtSignal(list)
     getCurrentUidSignal = QtCore.pyqtSignal(str)
+    loginAccountSignal = QtCore.pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -295,6 +297,7 @@ class BaiUI(QWidget):
         self.changeDirSingal.connect(self.changeDir)
         self.downloadFilesSignal.connect(self.downloadFiles)
         self.getCurrentUidSignal.connect(self.getCurrentUid)
+        self.loginAccountSignal.connect(self.loginAccount)
 
         self.initUI()
 
@@ -360,9 +363,9 @@ class BaiUI(QWidget):
         if uid == '0':
             log.info("not login")
             self.username = QLabel('用户名')
-            self.username_input = QLineEdit()
+            self.username_input = QLineEdit('')
             self.password = QLabel('密码')
-            self.password_input = QLineEdit()
+            self.password_input = QLineEdit('')
             self.loginbtn = QPushButton('登录')
             self.loginbtn.clicked.connect(self.LoginBtnClicked)
             
@@ -414,6 +417,30 @@ class BaiUI(QWidget):
             #if "Complete" in r:
             #    self.updateStatus(r)
 
+    def loginAccount(self, result):
+        execute_id = result[0][11:]
+        log.debug("execute_id: " + execute_id + str(result[1:]))
+        recha = 0
+        for r in result[1:]:
+            if "打开以下路径, 以查看验证码" in r:
+                log.debug("recha")
+                recha = 1
+                continue
+            if recha == 1:
+                log.debug(r)
+                qin = dialog=QDialog()
+                text = QLineEdit(qin)
+                l1=QtWidgets.QLabel(qin)
+                #调用QtGui.QPixmap方法，打开一个图片，存放在变量png中
+                png=QtGui.QPixmap('/home/capture/Pictures/Selection_026.png')
+                # 在l1里面，调用setPixmap命令，建立一个图像存放框，并将之前的图像png存放在这个框框里。
+                l1.setPixmap(png)
+
+                btn=QPushButton('确定',qin)
+                t, ok = QInputDialog.getText(self, "用户输入对话框",  "请输入任意内容" )
+                if ok:
+                    pass
+
     def processCallback(self, func, result):
         log.debug("call processCallback")
         log.debug(func)
@@ -429,6 +456,8 @@ class BaiUI(QWidget):
             self.downloadFilesSignal.emit(result)
         if func == "getCurrentUid" :
             self.getCurrentUidSignal.emit(result)
+        if func == "loginAccount" :
+            self.loginAccountSignal.emit(result)
 
     #SLOT EVENT#
     def DownloadClicked(self):
@@ -466,7 +495,7 @@ class BaiUI(QWidget):
             self.xer.downloadFiles(line[4])
 
     def LoginBtnClicked(self):
-        pass
+        self.xer.loginAccount(self.username_input.text(), self.password_input.text())
 
     def closeEvent(self,event):
         log.info("closeEvent")

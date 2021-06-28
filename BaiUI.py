@@ -20,7 +20,7 @@ draft version.
 '''
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QCheckBox,QTabBar
-from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget
+from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget,QDialog
 from PyQt5.QtGui import QTextCursor, QIcon,QPainter,QPixmap
 from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem,QAbstractItemView,QProgressBar,QHeaderView
@@ -368,6 +368,7 @@ class BaiUI(QWidget):
             self.password_input = QLineEdit('')
             self.loginbtn = QPushButton('登录')
             self.loginbtn.clicked.connect(self.LoginBtnClicked)
+            self.password_input.setEchoMode(QLineEdit.Password)
             
             self.top_hbox_nav.addWidget(self.username)
             self.top_hbox_nav.addWidget(self.username_input)
@@ -426,25 +427,80 @@ class BaiUI(QWidget):
                 log.debug("recha")
                 recha = 1
                 continue
+            if "选择一种验证方式" in r:
+                log.debug("validate")
+                recha = 2
+                continue
+
+            if "请输入接收到的验证码" in r:
+                log.debug("validate code")
+                recha = 3
+
+                self.validatecode_dialog = QDialog()
+                readme = QLabel('请输入接收到的验证码', self.validatecode_dialog)
+                self.validatecodetext = QLineEdit(self.validatecode_dialog)
+                self.validatecodebtn = QPushButton('确定',self.validatecode_dialog)
+                self.validatecodebtn.clicked.connect(lambda: self.ValidateCodeClicked(execute_id))
+                readme.move(30,40)
+                self.validatecodetext.move(30,90)
+                self.validatecodebtn.move(30,120)
+                self.validatecode_dialog.setWindowTitle("请输入接收到的验证码")
+                self.validatecode_dialog.exec_()
+                continue
+
+            if "百度帐号登录成功:" in r:
+                log.debug("login success")
+                self.xer.getAllFiles()
+                self.xer.getCurrentDir()
+
+                self.top_hbox_nav.removeWidget(self.username)
+                self.top_hbox_nav.removeWidget(self.username_input)
+                self.top_hbox_nav.removeWidget(self.password)
+                self.top_hbox_nav.removeWidget(self.password_input)
+                self.top_hbox_nav.removeWidget(self.loginbtn)
+                break
+
             if recha == 1:
                 log.debug(r)
-                qin = dialog=QDialog()
-                text = QLineEdit(qin)
-                l1=QtWidgets.QLabel(qin)
+                self.captcha_dialog = QDialog()
+                self.captchatext = QLineEdit(self.captcha_dialog)
+                self.captchabtn = QPushButton('确定',self.captcha_dialog)
+                self.captchabtn.clicked.connect(lambda: self.CaptchaClicked(execute_id))
+                picture = QLabel(self.captcha_dialog)
                 #调用QtGui.QPixmap方法，打开一个图片，存放在变量png中
-                png=QtGui.QPixmap('/home/capture/Pictures/Selection_026.png')
-                # 在l1里面，调用setPixmap命令，建立一个图像存放框，并将之前的图像png存放在这个框框里。
-                l1.setPixmap(png)
+                png = QPixmap(r[:-1])
+                png.scaled(100,40)
 
-                btn=QPushButton('确定',qin)
-                t, ok = QInputDialog.getText(self, "用户输入对话框",  "请输入任意内容" )
-                if ok:
-                    pass
+                picture.setPixmap(png)
+                picture.setScaledContents(True)
+
+                picture.move(30,0)
+                self.captchatext.move(30,40)
+                self.captchabtn.move(30,100)
+                self.captcha_dialog.setWindowTitle("请输入验证码")
+                self.captcha_dialog.exec_()
+
+                recha = 0
+            if recha == 2:
+                log.debug(r)
+                self.validate_dialog = QDialog()
+                readme = QLabel('选择一种验证方式：\n'+ r[:-1] +'，2：邮箱 \n请输入验证方式(1 或 2)', self.validate_dialog)
+                self.validatetext = QLineEdit(self.validate_dialog)
+                self.validatebtn = QPushButton('确定',self.validate_dialog)
+                self.validatebtn.clicked.connect(lambda: self.ValidateClicked(execute_id))
+                readme.move(30,40)
+                self.validatetext.move(30,90)
+                self.validatebtn.move(30,120)
+                self.validate_dialog.setWindowTitle("请选择验证方式")
+                self.validate_dialog.exec_()
+
+                recha = 0
+
 
     def processCallback(self, func, result):
         log.debug("call processCallback")
         log.debug(func)
-        #log.debug(result[len(result)-1])
+        log.debug(str(result))
 
         if func == "getAllFiles" :
             self.updateFileListSignal.emit(result)
@@ -460,6 +516,21 @@ class BaiUI(QWidget):
             self.loginAccountSignal.emit(result)
 
     #SLOT EVENT#
+    def CaptchaClicked(self, execute_id):
+        cap_input = self.captchatext.text()
+        self.captcha_dialog.close()
+        self.xer.setCapcha(execute_id,cap_input)
+
+    def ValidateClicked(self, execute_id):
+        validate_input = self.validatetext.text()
+        self.validate_dialog.close()
+        self.xer.setValidateType(execute_id,validate_input)
+
+    def ValidateCodeClicked(self, execute_id):
+        validate_input = self.validatecodetext.text()
+        self.validatecode_dialog.close()
+        self.xer.setValidateType(execute_id,validate_input)
+
     def DownloadClicked(self):
         log.info(self.filelist.getCheckedFiles())
         for f in self.filelist.getCheckedFiles():

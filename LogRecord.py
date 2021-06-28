@@ -11,7 +11,7 @@ rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
 log_path = os.getcwd() + '/Logs/'
 logfile = log_path + rq + '.log'
 
-fh = logging.FileHandler(logfile, mode='w')
+fh = logging.FileHandler(logfile, mode='w', encoding='utf-8')
 fh.setLevel(_level_)
 
 formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")

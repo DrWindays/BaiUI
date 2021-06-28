@@ -53,6 +53,8 @@ class Processer(QObject):
         self.execute_rt_out_file = []
         self.execute_rt_in_file = []
         self.execute_rt_inoutflag = []
+        self.execute_rt_sub = []
+
         self.execute_rt_id = 0
         self.execute_rt_semaphore = threading.Semaphore(1)
         #self.subp = subprocess.Popen("BaiduPCS-Go.exe", shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -76,6 +78,10 @@ class Processer(QObject):
                 log.info("stop subprocess")
             except:
                 log.error("not exist subprocess")
+
+        for f in self.execute_rt_out_file:
+            log.info("file close")
+            f.close()
 
     def registerCallback(self,callback):
         self.callback = callback
@@ -108,11 +114,11 @@ class Processer(QObject):
         return result[0][ result[0].find("uid: ") + 5 : result[0].find(", 用")]
 
     def changeDir_thread(self, parm):
-        result = self.subprocess_execute(PROGRAM_RUN + "cd " + parm[0])
+        result = self.subprocess_execute(PROGRAM_RUN + "cd " + parm[1])
         return
 
     def downloadFiles_thread(self, parm):
-        result = self.subprocess_execute_realtime(PROGRAM_RUN + "d -p 1 " + parm[0])
+        result = self.subprocess_execute_realtime(PROGRAM_RUN + "d -p 1 " + parm[1], parm[0])
         return result
 
     def deleteFiles_thread(self,filename):
@@ -120,7 +126,19 @@ class Processer(QObject):
 
     def loginAccount_thread(self, parm):
         result = self.subprocess_execute_realtime(PROGRAM_RUN + 
-            "login --username " + parm[0] + " --password " + parm[1])
+            "login --username " + parm[1] + " --password " + parm[2], parm[0])
+        return result
+
+    def inputData_thread(self, parm):
+        execute_id, inputdata = parm[1:]
+        log.debug("inputData_thread " + str(execute_id) + " " + str(inputdata))
+
+        execute_id = int(execute_id)
+        inputdata = str.encode(inputdata)
+        self.execute_rt_sub[execute_id].stdin.write(inputdata)
+        self.execute_rt_sub[execute_id].stdin.write(b"\n")
+        self.execute_rt_sub[execute_id].stdin.flush() # 写入东西后必须加flush刷新
+        return
 
     def subprocess_execute(self, cmd):
         result_text = []
@@ -136,7 +154,7 @@ class Processer(QObject):
             result_text.append(str(line, encoding = "utf-8"))
         return result_text
 
-    def subprocess_execute_realtime(self, cmd):
+    def subprocess_execute_realtime(self, cmd, func):
         result_text = []
         self.execute_rt_semaphore.acquire()
         execute_rt_id = self.execute_rt_id
@@ -144,33 +162,36 @@ class Processer(QObject):
         self.execute_rt_id+=1
 
         self.execute_rt_out_file.append(tempfile.NamedTemporaryFile())
-        self.execute_rt_in_file.append(tempfile.TemporaryFile())
+        self.execute_rt_in_file.append(tempfile.NamedTemporaryFile(mode='r'))
         self.execute_rt_inoutflag.append(1)
-        self.execute_rt_semaphore.release()
 
         fileno = self.execute_rt_out_file[execute_rt_id].fileno()
         fileno_in = self.execute_rt_in_file[execute_rt_id].fileno()
 
+        subp = subprocess.Popen(cmd, shell=True, stdout=fileno, stdin=subprocess.PIPE)
+        #self.subprocesslist.append(subp)
+        self.execute_rt_sub.append(subp)
+
+        self.execute_rt_semaphore.release()
+
+
         log.info("subprocess_execute_realtime " + cmd)
 
-        processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,execute_rt_id,))
+        processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,execute_rt_id,func,))
         self.threadlist.append(processthread)
         processthread.start()
 
-        subp = subprocess.Popen(cmd, shell=True, stdout=fileno, stderr=fileno, stdin=fileno_in)
-        self.subprocesslist.append(subp)
-        subp.communicate()
+        subp.wait()
 
-        time.sleep(1)
         self.execute_rt_inoutflag[execute_rt_id] = 0
-        stop_thread(processthread)
+        #stop_thread(processthread)
 
         return ['execute_id:'+str(execute_rt_id), 'Complete']
 
-    def subprocess_inout(self,execute_id):
+    def subprocess_inout(self,execute_id, func):
         offset = 0
         while True:
-            #if self.execute_rt_inoutflag[execute_id] != 0:
+            if self.execute_rt_inoutflag[execute_id] != 0:
                 result_text = []
                 result_text.append('execute_id:' + str(execute_id))
                 result_text.append('')
@@ -190,17 +211,19 @@ class Processer(QObject):
                     log.debug("line: " + str(line, encoding = "utf-8") + " len " + str(len(line)) + " offset " + str(offset))
                     offset += len(line)
 
+                tmp_file.close()
+
                 if before_offset == offset:
                     continue
                 if self.callback != None:
-                    self.callback(self.func.__name__[:-7], result_text)
+                    self.callback(func, result_text)
 
                 tmp_in_file = self.execute_rt_in_file[execute_id]
                 for line_in in tmp_in_file:
                     log.debug("subprocess_execute input " + str(line, encoding = "utf-8"))
-            #else:
-            #    log.info("subprocess_inout exit")
-            #    break
+            else:
+                log.info("subprocess_inout exit")
+                break
             #time.sleep(0.5)
 
 
@@ -214,20 +237,32 @@ class Processer(QObject):
             self.callback(func.__name__[:-7], result)
         log.info("end Thread")
 
+    def inputData(self, execute_id, inputdata, func):
+        parm = []
+        parm.append(func)
+        parm.append(execute_id)
+        parm.append(inputdata)
+        th = threading.Thread(target=self.startThread,args=(self.inputData_thread,parm))
+        self.threadlist.append(th)
+        th.start()
+
     def getAllFiles(self):
         parm = []
+        parm.append('getAllFiles')
         th = threading.Thread(target=self.startThread,args=(self.getAllFiles_thread,parm))
         self.threadlist.append(th)
         th.start()
 
     def getCurrentDir(self):
         parm = []
+        parm.append('getCurrentDir')
         th = threading.Thread(target=self.startThread,args=(self.getCurrentDir_thread,parm))
         self.threadlist.append(th)
         th.start()
 
     def changeDir(self, dir):
         parm = []
+        parm.append('changeDir')
         parm.append(dir)
         th = threading.Thread(target=self.startThread,args=(self.changeDir_thread, parm))
         self.threadlist.append(th)
@@ -235,6 +270,7 @@ class Processer(QObject):
 
     def downloadFiles(self, filename):
         parm = []
+        parm.append('downloadFiles')
         parm.append(filename)
         th = threading.Thread(target=self.startThread,args=(self.downloadFiles_thread, parm))
         self.threadlist.append(th)
@@ -242,6 +278,7 @@ class Processer(QObject):
 
     def loginAccount(self, username, password):
         parm = []
+        parm.append('loginAccount')
         parm.append(username)
         parm.append(password)
         th = threading.Thread(target=self.startThread,args=(self.loginAccount_thread, parm))
@@ -250,6 +287,16 @@ class Processer(QObject):
 
     def getCurrentUid(self):
         parm = []
+        parm.append('getCurrentUid')
         th = threading.Thread(target=self.startThread,args=(self.getCurrentUid_thread,parm))
         self.threadlist.append(th)
         th.start()
+
+    def setCapcha(self, execute_id, cap):
+        self.inputData(execute_id, cap, 'setCapcha')
+
+    def setValidateType(self, execute_id, validate_type):
+        self.inputData(execute_id, validate_type, 'setValidateType')
+
+    def setValidateCode(self, execute_id, code):
+        self.inputData(execute_id, code, 'setValidateCode')

@@ -129,6 +129,11 @@ class Processer(QObject):
             "login --username " + parm[1] + " --password " + parm[2], parm[0])
         return result
 
+    def logoutAccount_thread(self, parm):
+        result = self.subprocess_execute_realtime(PROGRAM_RUN + "logout", parm[0])
+        return result
+
+
     def inputData_thread(self, parm):
         execute_id, inputdata = parm[1:]
         log.debug("inputData_thread " + str(execute_id) + " " + str(inputdata))
@@ -162,11 +167,9 @@ class Processer(QObject):
         self.execute_rt_id+=1
 
         self.execute_rt_out_file.append(tempfile.NamedTemporaryFile())
-        self.execute_rt_in_file.append(tempfile.NamedTemporaryFile(mode='r'))
         self.execute_rt_inoutflag.append(1)
 
         fileno = self.execute_rt_out_file[execute_rt_id].fileno()
-        fileno_in = self.execute_rt_in_file[execute_rt_id].fileno()
 
         subp = subprocess.Popen(cmd, shell=True, stdout=fileno, stdin=subprocess.PIPE)
         #self.subprocesslist.append(subp)
@@ -218,9 +221,9 @@ class Processer(QObject):
                 if self.callback != None:
                     self.callback(func, result_text)
 
-                tmp_in_file = self.execute_rt_in_file[execute_id]
-                for line_in in tmp_in_file:
-                    log.debug("subprocess_execute input " + str(line, encoding = "utf-8"))
+                #tmp_in_file = self.execute_rt_in_file[execute_id]
+                #for line_in in tmp_in_file:
+                #    log.debug("subprocess_execute input " + str(line, encoding = "utf-8"))
             else:
                 log.info("subprocess_inout exit")
                 break
@@ -285,6 +288,14 @@ class Processer(QObject):
         self.threadlist.append(th)
         th.start()
 
+    def logoutAccount(self):
+        parm = []
+        parm.append('logoutAccount')
+        th = threading.Thread(target=self.startThread,args=(self.logoutAccount_thread, parm))
+        self.threadlist.append(th)
+        th.start()
+
+
     def getCurrentUid(self):
         parm = []
         parm.append('getCurrentUid')
@@ -300,3 +311,7 @@ class Processer(QObject):
 
     def setValidateCode(self, execute_id, code):
         self.inputData(execute_id, code, 'setValidateCode')
+
+    def logoutCheck(self, execute_id, check):
+        self.inputData(execute_id, check, 'logoutCheck')
+        

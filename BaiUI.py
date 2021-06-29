@@ -255,6 +255,7 @@ class BaiUI(QWidget):
     downloadFilesSignal = QtCore.pyqtSignal(list)
     getCurrentUidSignal = QtCore.pyqtSignal(str)
     loginAccountSignal = QtCore.pyqtSignal(list)
+    logoutAccountSignal = QtCore.pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -275,7 +276,8 @@ class BaiUI(QWidget):
         self.selectAllBtn = QPushButton("全选")
         self.downloadFileList = DownloadFileList()
         self.top_hbox_nav = QHBoxLayout()
-
+        self.logoutbtn = QPushButton("登出")
+ 
         self.now_down_vbox.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
         self.selectFlag = False
@@ -291,13 +293,15 @@ class BaiUI(QWidget):
         self.downloadBtn.clicked.connect(self.DownloadClicked)
         self.selectAllBtn.clicked.connect(self.SelectAllClicked)
         self.filelist.fileListDoubleClicked.connect(self.FileListDoubleClicked)
-
+        self.logoutbtn.clicked.connect(self.LogoutClicked)
+ 
         self.updateFileListSignal.connect(self.updateFileList)
         self.updateDirSignal.connect(self.updateDir)
         self.changeDirSingal.connect(self.changeDir)
         self.downloadFilesSignal.connect(self.downloadFiles)
         self.getCurrentUidSignal.connect(self.getCurrentUid)
         self.loginAccountSignal.connect(self.loginAccount)
+        self.logoutAccountSignal.connect(self.logoutAccount)
 
         self.initUI()
 
@@ -379,6 +383,7 @@ class BaiUI(QWidget):
         else:
             self.xer.getAllFiles()
             self.xer.getCurrentDir()
+            self.top_hbox_nav.addWidget(self.logoutbtn)
             #self.updateFileList()
 
     def changeDir(self):
@@ -458,6 +463,14 @@ class BaiUI(QWidget):
                 self.top_hbox_nav.removeWidget(self.password)
                 self.top_hbox_nav.removeWidget(self.password_input)
                 self.top_hbox_nav.removeWidget(self.loginbtn)
+
+                self.username.deleteLater()
+                self.username_input.deleteLater()
+                self.password.deleteLater()
+                self.password_input.deleteLater()
+                self.loginbtn.deleteLater()
+
+                self.top_hbox_nav.addWidget(self.logoutbtn)
                 break
 
             if recha == 1:
@@ -496,6 +509,16 @@ class BaiUI(QWidget):
 
                 recha = 0
 
+    def logoutAccount(self, result):
+        execute_id = result[0][11:]
+        log.debug("execute_id: " + execute_id + str(result))
+        for r in result[1:]:
+            log.debug(r)
+            if '确认退出百度帐号' in r:
+                self.xer.inputData(execute_id, 'y', 'logoutAccount')
+                self.xer.getCurrentUid()
+                self.top_hbox_nav.removeWidget(self.logoutbtn)
+                self.logoutbtn.deleteLater()
 
     def processCallback(self, func, result):
         log.debug("call processCallback")
@@ -514,6 +537,8 @@ class BaiUI(QWidget):
             self.getCurrentUidSignal.emit(result)
         if func == "loginAccount" :
             self.loginAccountSignal.emit(result)
+        if func == "logoutAccount" :
+            self.logoutAccountSignal.emit(result)
 
     #SLOT EVENT#
     def CaptchaClicked(self, execute_id):
@@ -567,6 +592,9 @@ class BaiUI(QWidget):
 
     def LoginBtnClicked(self):
         self.xer.loginAccount(self.username_input.text(), self.password_input.text())
+
+    def LogoutClicked(self):
+        self.xer.logoutAccount()
 
     def closeEvent(self,event):
         log.info("closeEvent")

@@ -157,7 +157,7 @@ class DownloadFileList(QTableWidget):
         return allsize,unit_allsize,complete,unit_complete,speed,left
 
     def updateProgress(self, execute_id, progress_str):
-        item = self.getItemByExecuteID(execute_id)
+        item, i = self.getItemByExecuteID(execute_id)
         if item != None:
 
             allsize,unit_allsize,complete,unit_complete,speed,left = self.splitProgressStr(progress_str)
@@ -167,15 +167,26 @@ class DownloadFileList(QTableWidget):
             item[5].setValue( int( float(complete)/float(allsize) * 100))
 
     def updateStatus(self, execute_id, str):
-        item = self.getItemByExecuteID(execute_id)
+        item, i = self.getItemByExecuteID(execute_id)
         if item != None:
             item[4].setText(str)
             #item[5].setValue( int( float(complete)/float(allsize) * 100))
 
+    def removeDownloadFile(self, execute_id):
+        f, i = self.getItemByExecuteID(execute_id)
+        filename = f[1]
+        size = f[3].text()
+        log.debug(filename + '  ' + size)
+        self.removeRow(i)
+        self.filelist.remove(f)
+        return filename, size
+
     def getItemByExecuteID(self, execute_id):
+        i = 0
         for f in self.filelist:
             if f[0] == execute_id:
-                return f
+                return f,i
+            i+=1
         return None
 
 
@@ -275,6 +286,7 @@ class BaiUI(QWidget):
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
         self.downloadFileList = DownloadFileList()
+        self.completeFileList = DownloadFileList()
         self.top_hbox_nav = QHBoxLayout()
         self.logoutbtn = QPushButton("登出")
  
@@ -320,6 +332,7 @@ class BaiUI(QWidget):
 
         self.mypan_tab.setLayout(self.mypan_vbox)
         self.now_down_tab.setLayout(self.now_down_vbox)
+        self.comp_down_tab.setLayout(self.comp_down_vbox)
 
         god_vbox_main.addLayout(self.top_hbox_nav)
         
@@ -354,6 +367,9 @@ class BaiUI(QWidget):
 
         #create now download tab
         self.now_down_vbox.addWidget(self.downloadFileList)
+
+        #create complete download tab
+        self.comp_down_vbox.addWidget(self.completeFileList)
 
         self.show()
 
@@ -393,9 +409,13 @@ class BaiUI(QWidget):
     def getFileSize(self,filePath):
      
         fsize = os.path.getsize(filePath)
+        if fsize < 1000:
+            return str(fsize) + 'B'
+        if fsize < 1000000:
+            return str( round( (fsize / 1024) , 2) ) + 'KB'
+        
         fsize = fsize/float(1024 * 1024)
-     
-        return round(fsize, 2)
+        return str( round(fsize, 2) ) + 'MB'
 
     def downloadFiles(self, result):
         execute_id = result[0][11:]
@@ -416,10 +436,22 @@ class BaiUI(QWidget):
                 self.downloadFileList.updateStatus(execute_id, r[r.rfind("[1] 下载文件失败"):-1])
 
             if "[1] 文件已经存在" in r:
-                filesize = self.getFileSize( r[ r.find("[1] 文件已经存在") + 12: r.find(',') ] )
-                self.downloadFileList.updateProgress(execute_id,
-                     "[1] ↓" + str(filesize)+"MB/" + str(filesize)+"MB 0B/s in 0s, left - ........")
-                self.downloadFileList.updateStatus(execute_id, "文件已经存在")
+
+                filename = r[ r.find("[1] 文件已经存在") + 12: r.find(',') ]
+                size = self.getFileSize(filename)
+
+                self.downloadFileList.removeDownloadFile(execute_id)
+                self.completeFileList.addDownloadFile(execute_id, filename)
+                self.completeFileList.updateProgress(execute_id, 
+                    "[1] ↓" + size + "/" + size + " 0B/s in 0s, left - ........")
+                self.completeFileList.updateStatus(execute_id, "已完成")
+
+            if "[1] 下载完成" in r:
+                filename, size = self.downloadFileList.removeDownloadFile(execute_id)
+                self.completeFileList.addDownloadFile(execute_id, filename)
+                self.completeFileList.updateProgress(execute_id, 
+                    "[1] ↓" + size +" 0B/s in 0s, left - ........")
+                self.completeFileList.updateStatus(execute_id, "已完成")
             #if "Complete" in r:
             #    self.updateStatus(r)
 

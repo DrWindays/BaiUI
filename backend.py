@@ -57,6 +57,7 @@ class Processer(QObject):
 
         self.execute_rt_id = 0
         self.execute_rt_semaphore = threading.Semaphore(1)
+        self.execute_rt_max_thread_sem = threading.Semaphore(5)
         #self.subp = subprocess.Popen("BaiduPCS-Go.exe", shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         #self.processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,))
         #self.threadlist.append(self.processthread)
@@ -133,6 +134,10 @@ class Processer(QObject):
         result = self.subprocess_execute_realtime(PROGRAM_RUN + "logout", parm[0])
         return result
 
+    def getAllConfigs_thread(self, parm):
+        result = self.subprocess_execute(PROGRAM_RUN + "config")
+        return result
+
 
     def inputData_thread(self, parm):
         execute_id, inputdata = parm[1:]
@@ -161,6 +166,14 @@ class Processer(QObject):
 
     def subprocess_execute_realtime(self, cmd, func):
         result_text = []
+
+        if func == "downloadFiles":
+            if self.callback != None:
+                result = [execute_id, '', '[1] 等待开始']
+                self.callback(func, result)
+
+
+        self.execute_rt_max_thread_sem.acquire()
         self.execute_rt_semaphore.acquire()
         execute_rt_id = self.execute_rt_id
 
@@ -188,6 +201,7 @@ class Processer(QObject):
 
         self.execute_rt_inoutflag[execute_rt_id] = 0
         #stop_thread(processthread)
+        self.execute_rt_max_thread_sem.release()
 
         return ['execute_id:'+str(execute_rt_id), 'Complete']
 
@@ -303,6 +317,13 @@ class Processer(QObject):
         self.threadlist.append(th)
         th.start()
 
+    def getAllConfigs(self):
+        parm = []
+        parm.append('getAllConfigs')
+        th = threading.Thread(target=self.startThread,args=(self.getAllConfigs_thread,parm))
+        self.threadlist.append(th)
+        th.start()
+
     def setCapcha(self, execute_id, cap):
         self.inputData(execute_id, cap, 'setCapcha')
 
@@ -314,4 +335,4 @@ class Processer(QObject):
 
     def logoutCheck(self, execute_id, check):
         self.inputData(execute_id, check, 'logoutCheck')
-        
+

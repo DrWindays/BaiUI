@@ -267,6 +267,7 @@ class BaiUI(QWidget):
     getCurrentUidSignal = QtCore.pyqtSignal(str)
     loginAccountSignal = QtCore.pyqtSignal(list)
     logoutAccountSignal = QtCore.pyqtSignal(list)
+    getAllConfigsSignal = QtCore.pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -275,6 +276,7 @@ class BaiUI(QWidget):
         self.mypan_vbox = QVBoxLayout()
         self.now_down_vbox = QVBoxLayout()
         self.comp_down_vbox = QVBoxLayout()
+        self.setup_vbox = QGridLayout()
         self.currentDirLbl = QLabel()
         self.now_down_l = QLabel("正在下载")
         self.comp_down_l = QLabel("完成下载")
@@ -283,6 +285,7 @@ class BaiUI(QWidget):
         self.now_down_tab = QWidget()
         self.comp_down_tab = QWidget()
         self.mypan_tab = QWidget()
+        self.setup_tab = QWidget()
         self.downloadBtn = QPushButton("下载")
         self.selectAllBtn = QPushButton("全选")
         self.downloadFileList = DownloadFileList()
@@ -290,16 +293,24 @@ class BaiUI(QWidget):
         self.top_hbox_nav = QHBoxLayout()
         self.logoutbtn = QPushButton("登出")
  
+        self.max_down_num_le = QLineEdit()
+
+        self.save_path_le = QLineEdit()
+
         self.now_down_vbox.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
         self.selectFlag = False
         self.now_download_list = []
+        self.configs = []
+
         #get backend handler: xer
         self.xer = backend.Processer(self.processCallback,self)
         #self.xer.registerCallback()
 
         self.filelist = FileList([],self)
         self.xer.getCurrentUid()
+
+        self.xer.getAllConfigs()
 
         #connect all slot
         self.downloadBtn.clicked.connect(self.DownloadClicked)
@@ -314,6 +325,7 @@ class BaiUI(QWidget):
         self.getCurrentUidSignal.connect(self.getCurrentUid)
         self.loginAccountSignal.connect(self.loginAccount)
         self.logoutAccountSignal.connect(self.logoutAccount)
+        self.getAllConfigsSignal.connect(self.getAllConfigs)
 
         self.initUI()
 
@@ -329,10 +341,12 @@ class BaiUI(QWidget):
         self.tabWidget.addTab(self.mypan_tab, '全部文件')
         self.tabWidget.addTab(self.now_down_tab, '正在下载')
         self.tabWidget.addTab(self.comp_down_tab, '传输完成')
+        self.tabWidget.addTab(self.setup_tab, '设置')
 
         self.mypan_tab.setLayout(self.mypan_vbox)
         self.now_down_tab.setLayout(self.now_down_vbox)
         self.comp_down_tab.setLayout(self.comp_down_vbox)
+        self.setup_tab.setLayout(self.setup_vbox)
 
         god_vbox_main.addLayout(self.top_hbox_nav)
         
@@ -370,6 +384,17 @@ class BaiUI(QWidget):
 
         #create complete download tab
         self.comp_down_vbox.addWidget(self.completeFileList)
+
+        #create setup tab
+
+        self.setup_vbox.addWidget(QLabel("最大下载任务数"), 0, 0)
+        self.setup_vbox.addWidget(self.max_down_num_le, 0, 1)
+        self.setup_vbox.addWidget(QLabel("保存路径"), 1, 0)
+        self.setup_vbox.addWidget(self.save_path_le, 1, 1)
+        self.setup_vbox.setContentsMargins(0,0,0,0)
+        self.setup_vbox.setSpacing(0)
+        self.setup_vbox.setVerticalSpacing(0)
+        self.setup_vbox.setHorizontalSpacing(0)
 
         self.show()
 
@@ -454,6 +479,8 @@ class BaiUI(QWidget):
                 self.completeFileList.updateStatus(execute_id, "已完成")
             #if "Complete" in r:
             #    self.updateStatus(r)
+            if "[1] 等待开始" in r:
+                self.downloadFileList.updateStatus(execute_id, "等待开始")
 
     def loginAccount(self, result):
         execute_id = result[0][11:]
@@ -552,6 +579,44 @@ class BaiUI(QWidget):
                 self.top_hbox_nav.removeWidget(self.logoutbtn)
                 self.logoutbtn.deleteLater()
 
+    def getAllConfigs(self,result):
+        execute_id = result[0][11:]
+        log.debug("execute_id: " + execute_id + str(result))
+        for r in result[5:]:
+            item = ' '.join(r.split())
+            item = item.split()
+            additem = []
+            if "appid" in r:
+                additem = [item[0],item[1],'',item[2]+item[3]+item[4]]
+            elif "cache_size" in r:
+                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]+item[6]+item[7]]
+            elif "max_parallel" in r:
+                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]]
+            elif "max_upload_parallel" in r:
+                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]]
+            elif "max_download_load" in r:
+                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]]
+            elif "savedir" in r:
+                additem = [item[0],item[1],'',item[2]]
+            elif "enable_https" in r:
+                additem = [item[0],item[1],item[2], item[3]+item[4]]
+            elif "user_agent" in r:
+                agentstr = ''
+                for s in item[1:-1]:
+                    agentstr = agentstr + ' ' + s
+                additem = [item[0],agentstr.strip(),'', item[-1]]
+            elif "pcs_ua" in r:
+                additem = [item[0],item[1],'',item[2]]
+            elif "proxy" in r:
+                additem = [item[0],'','',item[1]+item[2]+item[3]+item[4]]
+            elif "local_addrs" in r:
+                additem = [item[0],'','',item[1]+item[2]]
+            else:
+                additem = [item[0],item[1],item[2], item[3]]
+
+            self.configs.append(additem)
+            log.debug(str(additem))
+
     def processCallback(self, func, result):
         log.debug("call processCallback")
         log.debug(func)
@@ -571,6 +636,8 @@ class BaiUI(QWidget):
             self.loginAccountSignal.emit(result)
         if func == "logoutAccount" :
             self.logoutAccountSignal.emit(result)
+        if func == "getAllConfigs" :
+            self.getAllConfigsSignal.emit(result)
 
     #SLOT EVENT#
     def CaptchaClicked(self, execute_id):

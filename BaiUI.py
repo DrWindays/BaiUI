@@ -16,10 +16,15 @@ draft version.
 #2021-06-21
 使用BaiduPCS-Go v3.81
 
+#2021-07-07
+https://doc.qt.io
+添加设置页面
+
 ----------------------------------------------------
 '''
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit,QLabel, QTextEdit,QComboBox,QFileDialog,QCheckBox,QTabBar
+from PyQt5.QtWidgets import QPlainTextEdit
 from PyQt5.QtWidgets import QHBoxLayout,QVBoxLayout,QGridLayout,QPushButton,QTabWidget,QWidget,QDialog
 from PyQt5.QtGui import QTextCursor, QIcon,QPainter,QPixmap
 from PyQt5.QtWidgets import QStyle, QStyleOption,QStylePainter,QStyleOptionTab
@@ -294,14 +299,14 @@ class BaiUI(QWidget):
         self.logoutbtn = QPushButton("登出")
  
         self.max_down_num_le = QLineEdit()
-
+        self.config_table = QTableWidget()
         self.save_path_le = QLineEdit()
 
         self.now_down_vbox.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
         self.selectFlag = False
         self.now_download_list = []
-        self.configs = []
+        self.configs = {}
 
         #get backend handler: xer
         self.xer = backend.Processer(self.processCallback,self)
@@ -310,16 +315,15 @@ class BaiUI(QWidget):
         self.filelist = FileList([],self)
         self.xer.getCurrentUid()
 
-        self.xer.getAllConfigs()
 
         #connect all slot
         self.downloadBtn.clicked.connect(self.DownloadClicked)
         self.selectAllBtn.clicked.connect(self.SelectAllClicked)
         self.filelist.fileListDoubleClicked.connect(self.FileListDoubleClicked)
         self.logoutbtn.clicked.connect(self.LogoutClicked)
- 
+        self.tabWidget.currentChanged.connect(self.CurrentChanged)
+
         self.updateFileListSignal.connect(self.updateFileList)
-        self.updateDirSignal.connect(self.updateDir)
         self.changeDirSingal.connect(self.changeDir)
         self.downloadFilesSignal.connect(self.downloadFiles)
         self.getCurrentUidSignal.connect(self.getCurrentUid)
@@ -387,14 +391,23 @@ class BaiUI(QWidget):
 
         #create setup tab
 
-        self.setup_vbox.addWidget(QLabel("最大下载任务数"), 0, 0)
-        self.setup_vbox.addWidget(self.max_down_num_le, 0, 1)
-        self.setup_vbox.addWidget(QLabel("保存路径"), 1, 0)
-        self.setup_vbox.addWidget(self.save_path_le, 1, 1)
-        self.setup_vbox.setContentsMargins(0,0,0,0)
-        self.setup_vbox.setSpacing(0)
-        self.setup_vbox.setVerticalSpacing(0)
-        self.setup_vbox.setHorizontalSpacing(0)
+        self.setup_vbox.addWidget(self.config_table)
+        #self.setup_vbox.setContentsMargins(0,0,0,0)
+        #self.setup_vbox.setSpacing(0)
+        #self.setup_vbox.setVerticalSpacing(0)
+        #self.setup_vbox.setHorizontalSpacing(0)
+        self.config_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.config_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.config_table.horizontalHeader().setVisible(False)
+        self.config_table.verticalHeader().setVisible(False)
+        self.config_table.resizeRowsToContents()
+        self.config_table.resizeColumnsToContents()
+        self.config_table.setShowGrid(False);
+        self.config_table.setStyleSheet(
+        "QTableWidget{border:0px solid rgb(0,0,0);}"
+        "QTableWidget::Item{border:0px solid rgb(0,0,0);"
+        "border-bottom:1px solid rgb(0,0,0);}")
+        #self.setRowHeight(row - 1, 60)
 
         self.show()
 
@@ -581,41 +594,82 @@ class BaiUI(QWidget):
 
     def getAllConfigs(self,result):
         execute_id = result[0][11:]
-        log.debug("execute_id: " + execute_id + str(result))
         for r in result[5:]:
             item = ' '.join(r.split())
             item = item.split()
             additem = []
             if "appid" in r:
-                additem = [item[0],item[1],'',item[2]+item[3]+item[4]]
+                additem = [item[0],QPlainTextEdit(item[1]),'',item[2]+item[3]+item[4]]
             elif "cache_size" in r:
-                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]+item[6]+item[7]]
+                additem = [item[0],QPlainTextEdit(item[1]),item[2]+item[3]+item[4],item[5]+item[6]+item[7]]
             elif "max_parallel" in r:
-                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]]
+                additem = [item[0],QPlainTextEdit(item[1]),item[2]+item[3]+item[4],item[5]]
             elif "max_upload_parallel" in r:
-                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]]
+                additem = [item[0],QPlainTextEdit(item[1]),item[2]+item[3]+item[4],item[5]]
             elif "max_download_load" in r:
-                additem = [item[0],item[1],item[2]+item[3]+item[4],item[5]]
+                additem = [item[0],QPlainTextEdit(item[1]),item[2]+item[3]+item[4],item[5]]
             elif "savedir" in r:
-                additem = [item[0],item[1],'',item[2]]
+                additem = [item[0],QPlainTextEdit(item[1]),'',item[2]]
             elif "enable_https" in r:
-                additem = [item[0],item[1],item[2], item[3]+item[4]]
+                additem = [item[0],QPlainTextEdit(item[1]),item[2], item[3]+item[4]]
             elif "user_agent" in r:
                 agentstr = ''
                 for s in item[1:-1]:
                     agentstr = agentstr + ' ' + s
-                additem = [item[0],agentstr.strip(),'', item[-1]]
+                additem = [item[0],QPlainTextEdit(agentstr.strip()),'', item[-1]]
             elif "pcs_ua" in r:
-                additem = [item[0],item[1],'',item[2]]
+                additem = [item[0],QPlainTextEdit(),'',item[1]+item[2]]
             elif "proxy" in r:
-                additem = [item[0],'','',item[1]+item[2]+item[3]+item[4]]
+                additem = [item[0],QPlainTextEdit(),'',item[1]+item[2]+item[3]+item[4]]
             elif "local_addrs" in r:
-                additem = [item[0],'','',item[1]+item[2]]
+                additem = [item[0],QPlainTextEdit(),'',item[1]+item[2]]
+            elif "pcs_addr" in r:
+                additem = [item[0],QPlainTextEdit(item[1]),item[2],item[3]+item[4]]
+            elif "pan_ua" in r:
+                additem = [item[0],QPlainTextEdit(item[1]),item[2],item[3]+item[4]]
+            elif "max_download_rate" in r:
+                additem = [item[0],QPlainTextEdit(item[1],readOnly=True),'',item[2]+item[3]]
+            elif "max_upload_rate" in r:
+                additem = [item[0],QPlainTextEdit(item[1],readOnly=True),'',item[2]+item[3]]
             else:
-                additem = [item[0],item[1],item[2], item[3]]
+                additem = [item[0],QPlainTextEdit(item[1]),item[2], item[3]]
+            additem[1].setFixedHeight(self.countPlainTextEditFixedHeight(additem[1]))
+            additem[1].setLineWrapMode(True)
+            self.configs[item[0]] = additem
+            #log.debug(str(additem))
+        self.createConfigs()
 
-            self.configs.append(additem)
-            log.debug(str(additem))
+    def countPlainTextEditFixedHeight(self, plaintext):
+        blockCount = plaintext.blockCount()
+        height = plaintext.fontMetrics().size(0, plaintext.toPlainText()).height() + 30
+        return height
+        nUiWidth = plaintext.width()
+        nHeight = plaintext.fontMetrics().lineSpacing()
+        nRowCount = nSumWidth / nUiWidth
+        nRowCount = nRowCount + blockCount
+        return nHeight * nRowCount
+
+    def createConfigs(self):
+        self.config_table.clear()
+        self.config_table.setRowCount(len(self.configs))
+        self.config_table.setColumnCount(4)
+        row = 1
+        self.config_table.setItem(0, 0, QTableWidgetItem('名称'))
+        self.config_table.setItem(0, 1, QTableWidgetItem('值'))
+        #self.config_table.setItem(0, 2, QTableWidgetItem('建议值'))
+        self.config_table.setItem(0, 2, QTableWidgetItem('描述'))
+        for k in self.configs.keys():
+            self.config_table.setItem(row, 0, QTableWidgetItem(self.configs[k][0]))
+            self.config_table.setCellWidget(row, 1, self.configs[k][1])
+            #self.config_table.setItem(row, 2, QTableWidgetItem(self.configs[k][2]))
+            self.config_table.setItem(row, 2, QTableWidgetItem(self.configs[k][3]))
+            self.config_table.setColumnWidth(row, self.countPlainTextEditFixedHeight( self.configs[k][1]))
+            row += 1
+        #self.config_table.setColumnWidth(2, 200)
+        #self.config_table.setColumnWidth(3, 200)
+        #self.config_table.setColumnWidth(1, 200)
+        self.config_table.resizeRowsToContents()
+        self.config_table.resizeColumnsToContents()
 
     def processCallback(self, func, result):
         log.debug("call processCallback")
@@ -694,6 +748,11 @@ class BaiUI(QWidget):
 
     def LogoutClicked(self):
         self.xer.logoutAccount()
+
+    def CurrentChanged(self, index):
+        if index == 3:
+            self.xer.getAllConfigs()
+
 
     def closeEvent(self,event):
         log.info("closeEvent")

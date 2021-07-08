@@ -400,14 +400,11 @@ class BaiUI(QWidget):
         self.config_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.config_table.horizontalHeader().setVisible(False)
         self.config_table.verticalHeader().setVisible(False)
-        self.config_table.resizeRowsToContents()
-        self.config_table.resizeColumnsToContents()
-        self.config_table.setShowGrid(False);
+
         self.config_table.setStyleSheet(
         "QTableWidget{border:0px solid rgb(0,0,0);}"
         "QTableWidget::Item{border:0px solid rgb(0,0,0);"
         "border-bottom:1px solid rgb(0,0,0);}")
-        #self.setRowHeight(row - 1, 60)
 
         self.show()
 
@@ -633,21 +630,16 @@ class BaiUI(QWidget):
                 additem = [item[0],QPlainTextEdit(item[1],readOnly=True),'',item[2]+item[3]]
             else:
                 additem = [item[0],QPlainTextEdit(item[1]),item[2], item[3]]
-            additem[1].setFixedHeight(self.countPlainTextEditFixedHeight(additem[1]))
-            additem[1].setLineWrapMode(True)
             self.configs[item[0]] = additem
             #log.debug(str(additem))
         self.createConfigs()
 
     def countPlainTextEditFixedHeight(self, plaintext):
-        blockCount = plaintext.blockCount()
-        height = plaintext.fontMetrics().size(0, plaintext.toPlainText()).height() + 30
-        return height
         nUiWidth = plaintext.width()
         nHeight = plaintext.fontMetrics().lineSpacing()
-        nRowCount = nSumWidth / nUiWidth
-        nRowCount = nRowCount + blockCount
-        return nHeight * nRowCount
+        nSumWidth = plaintext.fontMetrics().width(plaintext.toPlainText())
+        nRowCount = nSumWidth / nUiWidth + 1
+        return nHeight * nRowCount + 18
 
     def createConfigs(self):
         self.config_table.clear()
@@ -662,14 +654,25 @@ class BaiUI(QWidget):
             self.config_table.setItem(row, 0, QTableWidgetItem(self.configs[k][0]))
             self.config_table.setCellWidget(row, 1, self.configs[k][1])
             #self.config_table.setItem(row, 2, QTableWidgetItem(self.configs[k][2]))
-            self.config_table.setItem(row, 2, QTableWidgetItem(self.configs[k][3]))
-            self.config_table.setColumnWidth(row, self.countPlainTextEditFixedHeight( self.configs[k][1]))
+
+            label = QLabel(self.configs[k][3])
+            label.setFixedWidth(200)
+            label.setWordWrap(True)
+            label.setMargin(7)
+            self.config_table.setCellWidget(row, 2, label )
+
+            self.configs[k][1].setWordWrapMode(QtGui.QTextOption.WrapAnywhere)
+            self.configs[k][1].setStyleSheet(
+            "QPlainTextEdit{border:0px solid rgb(0,0,0);}")
+            self.config_table.setRowHeight(row, max( self.countPlainTextEditFixedHeight( self.configs[k][1]), label.height() ) ) 
+            
             row += 1
-        #self.config_table.setColumnWidth(2, 200)
-        #self.config_table.setColumnWidth(3, 200)
+        self.config_table.setColumnWidth(2, 50)
+        #self.config_table.setColumnWidth(3, 100)
         #self.config_table.setColumnWidth(1, 200)
-        self.config_table.resizeRowsToContents()
+        #self.config_table.resizeRowsToContents()
         self.config_table.resizeColumnsToContents()
+        self.config_table.setShowGrid(False);
 
     def processCallback(self, func, result):
         log.debug("call processCallback")

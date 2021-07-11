@@ -11,6 +11,7 @@ import inspect
 import platform
 from shutil import copyfile
 
+MAX_DOWNLOAD_TASK = 3
 PROGRAM_RUN = ""
 if(platform.system()=='Windows'):
     log.info('Welcome Windows!')
@@ -57,7 +58,7 @@ class Processer(QObject):
 
         self.execute_rt_id = 0
         self.execute_rt_semaphore = threading.Semaphore(1)
-        self.execute_rt_max_thread_sem = threading.Semaphore(5)
+        self.execute_rt_max_thread_sem = threading.Semaphore(MAX_DOWNLOAD_TASK)
         #self.subp = subprocess.Popen("BaiduPCS-Go.exe", shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         #self.processthread = threading.Thread(target=Processer.subprocess_inout,args=(self,))
         #self.threadlist.append(self.processthread)
@@ -66,12 +67,6 @@ class Processer(QObject):
 
     def closeAllThread(self):
         log.info("closeAllThread")
-        for th in self.threadlist:
-            try:
-                stop_thread(th)
-                log.info("stop thread ")
-            except:
-                log.error("not exist thread")
 
         for sub in self.subprocesslist:
             try:
@@ -82,7 +77,20 @@ class Processer(QObject):
 
         for f in self.execute_rt_out_file:
             log.info("file close")
-            f.close()
+            try:
+                f.close()
+            except:
+                log.error("not exist filse")
+
+        for th in self.threadlist:
+            self.execute_rt_max_thread_sem.release()
+            self.execute_rt_semaphore.release()
+            try:
+                stop_thread(th)
+                log.info("stop thread ")
+            except:
+                log.error("not exist thread")
+
 
     def registerCallback(self,callback):
         self.callback = callback
@@ -138,6 +146,9 @@ class Processer(QObject):
         result = self.subprocess_execute(PROGRAM_RUN + "config")
         return result
 
+    def updateConfig_thread(self,parm):
+        result = self.subprocess_execute(PROGRAM_RUN + "config set --" + parm[1] + " " + str(parm[2]))
+        return result
 
     def inputData_thread(self, parm):
         execute_id, inputdata = parm[1:]
@@ -165,19 +176,20 @@ class Processer(QObject):
         return result_text
 
     def subprocess_execute_realtime(self, cmd, func):
-        result_text = []
-
-        if func == "downloadFiles":
-            if self.callback != None:
-                result = [execute_id, '', '[1] 等待开始']
-                self.callback(func, result)
-
-
-        self.execute_rt_max_thread_sem.acquire()
         self.execute_rt_semaphore.acquire()
         execute_rt_id = self.execute_rt_id
 
         self.execute_rt_id+=1
+
+        result_text = []
+        if func == "downloadFiles":
+            if self.callback != None:
+                result = ['execute_id:'+str(execute_rt_id), '', '[1] 等待开始 /' + cmd[ cmd.find("-p 1 ") + 5: ]+' ']
+                self.callback(func, result)
+        self.execute_rt_semaphore.release()
+
+        self.execute_rt_max_thread_sem.acquire()
+        self.execute_rt_semaphore.acquire()
 
         self.execute_rt_out_file.append(tempfile.NamedTemporaryFile())
         self.execute_rt_inoutflag.append(1)
@@ -323,6 +335,16 @@ class Processer(QObject):
         th = threading.Thread(target=self.startThread,args=(self.getAllConfigs_thread,parm))
         self.threadlist.append(th)
         th.start()
+
+    def updateConfig(self, config, value):
+        parm = []
+        parm.append('updateConfig')
+        parm.append(config)
+        parm.append(value)
+        th = threading.Thread(target=self.startThread,args=(self.updateConfig_thread,parm))
+        self.threadlist.append(th)
+        th.start()
+
 
     def setCapcha(self, execute_id, cap):
         self.inputData(execute_id, cap, 'setCapcha')

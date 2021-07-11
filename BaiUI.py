@@ -307,6 +307,7 @@ class BaiUI(QWidget):
         self.selectFlag = False
         self.now_download_list = []
         self.configs = {}
+        self.lastIndex = 0
 
         #get backend handler: xer
         self.xer = backend.Processer(self.processCallback,self)
@@ -458,7 +459,8 @@ class BaiUI(QWidget):
         for r in result[1:]:
             if "文件路径" in r:
                 #if self.downloadFileList.getItemByExecuteID(execute_id) == None:
-                self.downloadFileList.addDownloadFile(execute_id, r[ r.find("/"): ])
+                #self.downloadFileList.addDownloadFile(execute_id, r[ r.find("/"): ])
+                pass
             if "[1] ↓" in r:
                 #if self.now_download_list[downid] == None:
                 #    if self.now_download_list[downid][1] == None:
@@ -490,6 +492,7 @@ class BaiUI(QWidget):
             #if "Complete" in r:
             #    self.updateStatus(r)
             if "[1] 等待开始" in r:
+                self.downloadFileList.addDownloadFile(execute_id, r[ r.find("/"): ])
                 self.downloadFileList.updateStatus(execute_id, "等待开始")
 
     def loginAccount(self, result):
@@ -630,9 +633,15 @@ class BaiUI(QWidget):
                 additem = [item[0],QPlainTextEdit(item[1],readOnly=True),'',item[2]+item[3]]
             else:
                 additem = [item[0],QPlainTextEdit(item[1]),item[2], item[3]]
+            additem.append(additem[1].toPlainText())
             self.configs[item[0]] = additem
             #log.debug(str(additem))
         self.createConfigs()
+
+    def updateAllConfigs(self):
+        for k in self.configs.keys():
+            if self.configs[k][1].toPlainText() != self.configs[k][4] :
+                self.xer.updateConfig(self.configs[k][0], self.configs[k][1].toPlainText())
 
     def countPlainTextEditFixedHeight(self, plaintext):
         nUiWidth = plaintext.width()
@@ -753,8 +762,11 @@ class BaiUI(QWidget):
         self.xer.logoutAccount()
 
     def CurrentChanged(self, index):
+        if self.lastIndex == 3:
+            self.updateAllConfigs()
         if index == 3:
             self.xer.getAllConfigs()
+        self.lastIndex = index
 
 
     def closeEvent(self,event):
